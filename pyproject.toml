@@ -1,0 +1,32 @@
+[project]
+name = "preop-xai-reproduction"
+version = "0.1.0"
+description = "Reproducible execution of the unchanged MOVER PreOp-XAI reference"
+requires-python = "==3.13.*"
+dependencies = [
+  "scikit-learn==1.8.0",
+  "xgboost==2.1.4",
+  "numpy==2.4.4",
+  "pandas==3.0.2",
+  "scipy==1.17.1",
+  "matplotlib==3.10.9",
+  "python-docx==1.2.0",
+  "lxml==6.0.2",
+  "pypandoc-binary==1.15",
+  "pydantic==2.12.5",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.40.2",
+    "pandas-stubs>=3.0.5.260914",
+]
+
+[tool.basedpyright]
+include = ["scripts"]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "all"
