@@ -1,0 +1,22 @@
+{
+ "complication_rows": 203945,
+ "aqi_rows": 200139,
+ "indexed": {
+  "operations": 38194,
+  "with_aqi_documentation": 35472,
+  "negative_only": 35014,
+  "positive_only": 54,
+  "contradictory": 118,
+  "no_reviewed_state": 286,
+  "any_positive": 172
+ },
+ "modelled": {
+  "operations": 37196,
+  "with_aqi_documentation": 34527,
+  "negative_only": 34103,
+  "positive_only": 52,
+  "contradictory": 111,
+  "no_reviewed_state": 261,
+  "any_positive": 163
+ }
+}

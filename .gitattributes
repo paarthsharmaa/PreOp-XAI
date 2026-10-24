@@ -1,0 +1,3 @@
+# Preserve supplied reference bytes, including original Windows line endings.
+MOVER/** -text
+PreOp_XAI_MOVER_code_and_verification/** -text

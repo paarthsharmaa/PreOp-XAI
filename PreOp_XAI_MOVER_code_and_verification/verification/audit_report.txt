@@ -1,0 +1,196 @@
+PASS determinism rerun identical
+PASS SHAP self-test passed
+PASS mortality: 100 repeats with seeds 1..100
+PASS icu: 100 repeats with seeds 1..100
+PASS rerun evaluation equals main
+PASS main runs used the 24-h table
+PASS lag-0 runs used the lag-0 table
+PASS table hashes match environment record
+PASS repository commit 6baa665
+PASS flow: eligible - later = indexed
+PASS flow: indexed - unknown = modelled
+PASS modelled n equals study n
+PASS text contains '39,685'
+PASS text contains '64,354'
+PASS text contains '1,367'
+PASS text contains '7,317'
+PASS text contains '38,194'
+PASS text contains '37,196'
+PASS text contains '13,646'
+PASS text contains '(14 excluded)'
+PASS text contains '(34)'
+PASS text contains '(41)'
+PASS text contains '0.84%'
+PASS text contains '36.7%'
+PASS respiratory positive_only count
+PASS respiratory contradictory count
+PASS respiratory negative_only count
+PASS text contains '1,407,549'
+PASS text contains '188,088'
+PASS text contains '1,060,502'
+PASS text contains '33,888'
+PASS 24-h missingness range
+PASS lag-0 missingness range
+PASS text contains '26,037'
+PASS text contains '5,579'
+PASS text contains '5,580'
+PASS partitions identical for both endpoints
+PASS test deaths identical in all repeats (stratified)
+PASS text contains '47 deaths'
+PASS primary ICU test count typical (between 10th and 90th percentile share)
+PASS text contains '1,932–2,157'
+PASS Table I age
+PASS Table I female
+PASS Table I ASA III-V
+PASS Table I creatinine
+PASS Table I age
+PASS Table I female
+PASS Table I ASA III-V
+PASS Table I creatinine
+PASS Table I age
+PASS Table I female
+PASS Table I ASA III-V
+PASS Table I creatinine
+PASS Table I age
+PASS Table I female
+PASS Table I ASA III-V
+PASS Table I creatinine
+PASS Table I age
+PASS Table I female
+PASS Table I ASA III-V
+PASS Table I creatinine
+PASS characteristics 'all' n equals cohort
+PASS claim: deaths more often ASA IV-V
+PASS claim: deaths less often missing labs
+PASS claim: VitalDB healthier (ASA I-II share higher)
+PASS claim: VitalDB almost completely tested (<10% missing)
+PASS claim: deaths older
+PASS mortality lr test AUROC+CI
+PASS mortality lr test AP+CI
+PASS mortality lr external AUROC+CI
+PASS mortality lr lag-0 AUROC
+PASS mortality lr repeats AUROC
+PASS mortality xgboost test AUROC+CI
+PASS mortality xgboost test AP+CI
+PASS mortality xgboost external AUROC+CI
+PASS mortality xgboost lag-0 AUROC
+PASS mortality xgboost repeats AUROC
+PASS mortality paired ΔAUROC
+PASS mortality share XGB ahead
+PASS mortality Δ 95% range
+PASS LR higher AP share
+PASS abstract Δ bound
+PASS abstract bound also covers ICU
+PASS icu lr test AUROC+CI
+PASS icu lr test AP+CI
+PASS icu lr external AUROC+CI
+PASS icu lr lag-0 AUROC
+PASS icu lr repeats AUROC
+PASS icu xgboost test AUROC+CI
+PASS icu xgboost test AP+CI
+PASS icu xgboost external AUROC+CI
+PASS icu xgboost lag-0 AUROC
+PASS icu xgboost repeats AUROC
+PASS icu paired ΔAUROC
+PASS icu share XGB ahead
+PASS ICU Δ median
+PASS ICU ΔAP median
+PASS claim: LR better externally for ICU (interval excludes 0)
+PASS claim: lag-0 ICU XGB ahead (interval excludes 0)
+PASS claim: lag-0 AUROCs higher than primary
+PASS claim: ICU XGB advantage reversed externally
+PASS mortality lr Table III MOVER
+PASS mortality lr Table III VitalDB
+PASS mortality lr Table III op MOVER
+PASS mortality lr Table III op VitalDB
+PASS mortality lr: Brier below prevalence reference internally
+PASS mortality lr validation slope
+PASS mortality xgboost Table III MOVER
+PASS mortality xgboost Table III VitalDB
+PASS mortality xgboost Table III op MOVER
+PASS mortality xgboost Table III op VitalDB
+PASS mortality xgboost: Brier below prevalence reference internally
+PASS mortality xgboost validation slope
+PASS mortality: no non-positive validation slope over repeats
+PASS icu lr Table III MOVER
+PASS icu lr Table III VitalDB
+PASS icu lr Table III op MOVER
+PASS icu lr Table III op VitalDB
+PASS icu lr: Brier below prevalence reference internally
+PASS icu lr validation slope
+PASS icu xgboost Table III MOVER
+PASS icu xgboost Table III VitalDB
+PASS icu xgboost Table III op MOVER
+PASS icu xgboost Table III op VitalDB
+PASS icu xgboost: Brier below prevalence reference internally
+PASS icu xgboost validation slope
+PASS icu: no non-positive validation slope over repeats
+PASS claim: mortality underestimated externally (CITL>0)
+PASS claim: ICU overestimated externally (CITL<0)
+PASS claim: external ICU recalibrated Brier worse than reference
+PASS text contains 'LR flagged 545 test patients'
+PASS text contains 'detected 39 of 47 deaths'
+PASS text contains 'XGBoost detected 41 while flagging 611'
+PASS text contains 'detected only 7 (LR) and 9 (XGBoost) of 41 deaths'
+PASS share sensitivity>=0.8
+PASS repeat recal. slope range
+PASS text contains '5.9 of seven'
+PASS text contains 'but 0.5 in VitalDB'
+PASS mortality lr: ASA top in primary fit
+PASS mortality lr: ASA top in every refit
+PASS mortality lr: 10 successful refits
+PASS mortality lr Spearman
+PASS mortality lr Jaccard
+PASS mortality lr: Spearman recomputed from refit importances  [0.8047 vs 0.8047]
+PASS mortality lr: sex and age next after ASA in primary fit  [['asa', 'age', 'sex', 'platelets']]
+PASS mortality xgboost: ASA top in primary fit
+PASS mortality xgboost: ASA top in every refit
+PASS mortality xgboost: 10 successful refits
+PASS mortality xgboost Spearman
+PASS mortality xgboost Jaccard
+PASS mortality xgboost: Spearman recomputed from refit importances  [0.8335 vs 0.8335]
+PASS mortality xgboost: sex and age next after ASA in primary fit  [['asa', 'sex', 'age', 'hemoglobin']]
+PASS icu lr: ASA top in primary fit
+PASS icu lr: ASA top in every refit
+PASS icu lr: 10 successful refits
+PASS icu lr Spearman
+PASS icu lr Jaccard
+PASS icu lr: Spearman recomputed from refit importances  [0.4602 vs 0.4602]
+PASS icu lr: sex and age next after ASA in primary fit  [['asa', 'sex', 'age', 'bun']]
+PASS icu xgboost: ASA top in primary fit
+PASS icu xgboost: ASA top in every refit
+PASS icu xgboost: 10 successful refits
+PASS icu xgboost Spearman
+PASS icu xgboost Jaccard
+PASS icu xgboost: Spearman recomputed from refit importances  [0.6110 vs 0.6110]
+PASS claim: ICU XGB primary fit has glucose second
+PASS claim: mortality rankings more stable than ICU
+PASS text contains '40% of XGBoost refits'
+PASS ASA share mortality
+PASS ASA share icu
+PASS ASA IV-V cohort share
+PASS ASA IV-V death share
+PASS five authors in order  [['Raghav Goel', 'Bhavya Mansharamani', 'Subhash Chand Gupta', 'Prakhar Chandra', 'Shipra Saraswat']]
+PASS every author: Department of CSE, Amity University
+PASS no 'Amity School' anywhere
+PASS Prakhar and Shipra emails
+PASS sections  [['Introduction', 'Related Work', 'Data and Methods', 'Results', 'Discussion', 'Conclusion']]
+PASS 4 figure files embedded byte-identical  [4 media]
+PASS exactly 4 figures (images) in body  [4]
+PASS exactly 3 data tables  [3]
+PASS Fig. 1 referenced in body text
+PASS Fig. 2 referenced in body text
+PASS Fig. 3 referenced in body text
+PASS Fig. 4 referenced in body text
+PASS Table I referenced in body text
+PASS Table II referenced in body text
+PASS Table III referenced in body text
+PASS no Fig. 5 / Table IV references
+PASS references cited in numerical order of first appearance  [[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]]
+PASS every reference cited  [28 cited, 28 listed]
+PASS reference count 28  [28]
+PASS body length 2,300-3,300 words  [2803]
+PASS no leftover template text
+
+193/193 checks passed
+NOTE: email placeholders remain for ['Raghav Goel', 'Bhavya Mansharamani', 'Subhash Chand Gupta']

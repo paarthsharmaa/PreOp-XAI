@@ -1,0 +1,20 @@
+{
+ "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+ "platform": "Windows-11-10.0.26200-SP0",
+ "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+ "cpu_count": 20,
+ "packages": {
+  "scikit-learn": "1.8.0",
+  "xgboost": "2.1.4",
+  "numpy": "2.4.4",
+  "pandas": "3.0.2",
+  "scipy": "1.17.1",
+  "matplotlib": "3.10.9"
+ },
+ "inputs": {
+  "mover_analysis.csv": "66bc7dc57f03a91c2799dba4353b54f8cb669253ae1426873e16b499ccdde5bb",
+  "mover_analysis_lag0h.csv": "a0ba4c33227dd745b2a840616a5c3cd64a1c0c56d8f89d600ef0304a4b7d1d3e",
+  "vitaldb_clinical_data.csv": "e0c3b0b5ff3906657db62e7743e3b5bc97c75acb2d9b3d285d03d9892f20f433"
+ },
+ "repo_commit": "6baa665be0635e118fc1edad2065a50e42f9bc81"
+}

@@ -1,0 +1,694 @@
+{
+ "seed": 2026,
+ "requested_refits": 10,
+ "validation_n": 5579,
+ "background_n": 64,
+ "paired_draws": true,
+ "scale": "raw model log-odds; calibrator uncertainty excluded",
+ "background_convention": "same original raw training rows, transformed by each refit",
+ "grouping": "clinical concepts including their missingness contributions",
+ "models": {
+  "lr": {
+   "pairwise": [
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 1,
+     "spearman": 0.9272727272727272,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 2,
+     "spearman": 0.4545454545454545,
+     "top5_jaccard": 0.42857142857142855
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 3,
+     "spearman": 0.7939393939393938,
+     "top5_jaccard": 0.42857142857142855
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 4,
+     "spearman": 0.8545454545454544,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 5,
+     "spearman": 0.7212121212121211,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 6,
+     "spearman": 0.6727272727272726,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 7,
+     "spearman": 0.8666666666666665,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 8,
+     "spearman": 0.8181818181818182,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 9,
+     "spearman": 0.6121212121212121,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 2,
+     "spearman": 0.6969696969696969,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 3,
+     "spearman": 0.8666666666666665,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 4,
+     "spearman": 0.9757575757575757,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 5,
+     "spearman": 0.8909090909090909,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 6,
+     "spearman": 0.8303030303030302,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 7,
+     "spearman": 0.9515151515151514,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 8,
+     "spearman": 0.8424242424242423,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 9,
+     "spearman": 0.8060606060606059,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 3,
+     "spearman": 0.6606060606060605,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 4,
+     "spearman": 0.7939393939393938,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 5,
+     "spearman": 0.8545454545454544,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 6,
+     "spearman": 0.8060606060606059,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 7,
+     "spearman": 0.6848484848484848,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 8,
+     "spearman": 0.6121212121212121,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 9,
+     "spearman": 0.8666666666666665,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 4,
+     "spearman": 0.8666666666666665,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 5,
+     "spearman": 0.8545454545454544,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 6,
+     "spearman": 0.6848484848484848,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 7,
+     "spearman": 0.8545454545454544,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 8,
+     "spearman": 0.6363636363636362,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 9,
+     "spearman": 0.7454545454545454,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 5,
+     "spearman": 0.9151515151515152,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 6,
+     "spearman": 0.8303030303030302,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 7,
+     "spearman": 0.9272727272727272,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 8,
+     "spearman": 0.7939393939393938,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 9,
+     "spearman": 0.8666666666666665,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 6,
+     "spearman": 0.9030303030303028,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 7,
+     "spearman": 0.8545454545454544,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 8,
+     "spearman": 0.8303030303030302,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 9,
+     "spearman": 0.9272727272727272,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 6,
+     "second_successful_refit": 7,
+     "spearman": 0.7575757575757575,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 6,
+     "second_successful_refit": 8,
+     "spearman": 0.7696969696969697,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 6,
+     "second_successful_refit": 9,
+     "spearman": 0.8303030303030302,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 7,
+     "second_successful_refit": 8,
+     "spearman": 0.8424242424242423,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 7,
+     "second_successful_refit": 9,
+     "spearman": 0.8545454545454544,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 8,
+     "second_successful_refit": 9,
+     "spearman": 0.8060606060606059,
+     "top5_jaccard": 1.0
+    }
+   ],
+   "spearman_mean": 0.8047138047138047,
+   "spearman_defined_pairs": 45,
+   "spearman_undefined_pairs": 0,
+   "top5_jaccard_mean": 0.8116402116402115,
+   "top5_tie_rule": "clinical schema order",
+   "top5_inclusion_frequency": {
+    "age": 1.0,
+    "sex": 0.9,
+    "asa": 1.0,
+    "hemoglobin": 0.9,
+    "platelets": 0.9,
+    "creatinine": 0.2,
+    "bun": 0.0,
+    "sodium": 0.0,
+    "potassium": 0.0,
+    "glucose": 0.1
+   },
+   "mean_absolute_importance": {
+    "age": 0.1369222314120104,
+    "sex": 0.17230900130804333,
+    "asa": 1.2066256665807569,
+    "hemoglobin": 0.09245338232428786,
+    "platelets": 0.0974853881066613,
+    "creatinine": 0.050027118040383414,
+    "bun": 0.0346294789703994,
+    "sodium": 0.024604325650513344,
+    "potassium": 0.0212794204278924,
+    "glucose": 0.03601391507453542
+   },
+   "centered_contribution_rms_mean_over_patients": {
+    "age": 0.046826194516961725,
+    "sex": 0.042592557162073774,
+    "asa": 0.17862063886605795,
+    "hemoglobin": 0.06660193090594847,
+    "platelets": 0.08100502067921661,
+    "creatinine": 0.04406649815741442,
+    "bun": 0.030810628507502127,
+    "sodium": 0.02651453564525607,
+    "potassium": 0.027501075453102146,
+    "glucose": 0.02686439151028924
+   },
+   "centering": "subtract each validation patient's across-refit mean contribution",
+   "baseline_mean_by_successful_refit": [
+    -6.302011840915183,
+    -6.443487729225828,
+    -6.000461096342897,
+    -6.349394969822883,
+    -6.2520243240267845,
+    -6.108899559106513,
+    -6.155031994218987,
+    -6.282003490561212,
+    -6.280778266005693,
+    -6.197466968798091
+   ],
+   "baseline_shift_rms": 0.12012729875622896,
+   "status": "complete",
+   "successful_refits": 10
+  },
+  "xgboost": {
+   "pairwise": [
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 1,
+     "spearman": 0.8424242424242423,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 2,
+     "spearman": 0.8666666666666665,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 3,
+     "spearman": 0.8181818181818182,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 4,
+     "spearman": 0.9878787878787878,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 5,
+     "spearman": 0.9393939393939393,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 6,
+     "spearman": 0.8787878787878788,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 7,
+     "spearman": 0.8666666666666665,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 8,
+     "spearman": 0.9030303030303028,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 0,
+     "second_successful_refit": 9,
+     "spearman": 0.9515151515151514,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 2,
+     "spearman": 0.7939393939393938,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 3,
+     "spearman": 0.7575757575757575,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 4,
+     "spearman": 0.8787878787878788,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 5,
+     "spearman": 0.7575757575757575,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 6,
+     "spearman": 0.6484848484848483,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 7,
+     "spearman": 0.709090909090909,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 8,
+     "spearman": 0.8181818181818182,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 1,
+     "second_successful_refit": 9,
+     "spearman": 0.7696969696969697,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 3,
+     "spearman": 0.7575757575757575,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 4,
+     "spearman": 0.8787878787878788,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 5,
+     "spearman": 0.7939393939393938,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 6,
+     "spearman": 0.8303030303030302,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 7,
+     "spearman": 0.6727272727272726,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 8,
+     "spearman": 0.7696969696969697,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 2,
+     "second_successful_refit": 9,
+     "spearman": 0.8424242424242423,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 4,
+     "spearman": 0.7939393939393938,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 5,
+     "spearman": 0.7818181818181817,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 6,
+     "spearman": 0.7454545454545454,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 7,
+     "spearman": 0.8303030303030302,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 8,
+     "spearman": 0.7939393939393938,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 3,
+     "second_successful_refit": 9,
+     "spearman": 0.8787878787878788,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 5,
+     "spearman": 0.9030303030303028,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 6,
+     "spearman": 0.8545454545454544,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 7,
+     "spearman": 0.8303030303030302,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 8,
+     "spearman": 0.8909090909090909,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 4,
+     "second_successful_refit": 9,
+     "spearman": 0.9272727272727272,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 6,
+     "spearman": 0.8787878787878788,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 7,
+     "spearman": 0.8909090909090909,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 8,
+     "spearman": 0.7818181818181817,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 5,
+     "second_successful_refit": 9,
+     "spearman": 0.9515151515151514,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 6,
+     "second_successful_refit": 7,
+     "spearman": 0.9151515151515152,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 6,
+     "second_successful_refit": 8,
+     "spearman": 0.6848484848484848,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 6,
+     "second_successful_refit": 9,
+     "spearman": 0.9515151515151514,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 7,
+     "second_successful_refit": 8,
+     "spearman": 0.7333333333333332,
+     "top5_jaccard": 0.6666666666666666
+    },
+    {
+     "first_successful_refit": 7,
+     "second_successful_refit": 9,
+     "spearman": 0.9515151515151514,
+     "top5_jaccard": 1.0
+    },
+    {
+     "first_successful_refit": 8,
+     "second_successful_refit": 9,
+     "spearman": 0.8060606060606059,
+     "top5_jaccard": 0.6666666666666666
+    }
+   ],
+   "spearman_mean": 0.8335353535353535,
+   "spearman_defined_pairs": 45,
+   "spearman_undefined_pairs": 0,
+   "top5_jaccard_mean": 0.7555555555555555,
+   "top5_tie_rule": "clinical schema order",
+   "top5_inclusion_frequency": {
+    "age": 1.0,
+    "sex": 0.9,
+    "asa": 1.0,
+    "hemoglobin": 0.9,
+    "platelets": 0.6,
+    "creatinine": 0.0,
+    "bun": 0.6,
+    "sodium": 0.0,
+    "potassium": 0.0,
+    "glucose": 0.0
+   },
+   "mean_absolute_importance": {
+    "age": 0.13605383036718563,
+    "sex": 0.1230322096069062,
+    "asa": 0.9881384187814172,
+    "hemoglobin": 0.07247818561357364,
+    "platelets": 0.06088352068720969,
+    "creatinine": 0.019225119062503997,
+    "bun": 0.054601427814868764,
+    "sodium": 0.02399646081494784,
+    "potassium": 0.019137981073691572,
+    "glucose": 0.04078308837995802
+   },
+   "centered_contribution_rms_mean_over_patients": {
+    "age": 0.12848028731313973,
+    "sex": 0.046087870368898595,
+    "asa": 0.13923007131519027,
+    "hemoglobin": 0.04821258379530345,
+    "platelets": 0.03879445544828198,
+    "creatinine": 0.019907851470961812,
+    "bun": 0.04249338112890267,
+    "sodium": 0.022670808784009577,
+    "potassium": 0.019942462654454787,
+    "glucose": 0.03364479702922322
+   },
+   "centering": "subtract each validation patient's across-refit mean contribution",
+   "baseline_mean_by_successful_refit": [
+    -6.154650665819645,
+    -6.325213864445686,
+    -5.978868812322617,
+    -6.314626842737198,
+    -6.195459704846144,
+    -6.094474598765373,
+    -6.117337215691805,
+    -6.244217462837696,
+    -6.21178837493062,
+    -6.089199170470238
+   ],
+   "baseline_shift_rms": 0.10228253639872466,
+   "status": "complete",
+   "successful_refits": 10
+  }
+ },
+ "limitations": [
+  "Exploratory bootstrap stability, not a confidence interval for clinical effects.",
+  "Rows must be distinct indexed training patients.",
+  "Fixed validation patients and original background are not resampled.",
+  "No retuning, recalibration or threshold selection is performed."
+ ],
+ "single_class_draws": [],
+ "failures": [],
+ "successful_paired_draws": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9
+ ]
+}

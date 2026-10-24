@@ -1,0 +1,37 @@
+{
+ "candidate_rows": 1407549,
+ "unmapped_code_or_unit": 33888,
+ "reasons": {
+  "future_collection": 1060502,
+  "eligible": 311165,
+  "implausible": 1221,
+  "before_lookback": 773
+ },
+ "conflicting_latest": 220,
+ "modelled": 37196,
+ "deaths": 314,
+ "icu": 13646,
+ "missing_pct": {
+  "hemoglobin": 64.93,
+  "platelets": 64.96,
+  "creatinine": 64.17,
+  "bun": 64.17,
+  "sodium": 63.92,
+  "potassium": 63.8,
+  "glucose": 63.91
+ },
+ "asa": {
+  "3": 17429,
+  "2": 14116,
+  "4": 2732,
+  "1": 2613,
+  "5": 297,
+  "unknown": 9
+ },
+ "sex": {
+  "F": 18906,
+  "M": 18290
+ },
+ "age_min": 18.0,
+ "age_max": 90.0
+}

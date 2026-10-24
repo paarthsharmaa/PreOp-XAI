@@ -1,0 +1,2 @@
+Aggregate results only (metrics, intervals, model settings, aggregate SHAP summaries, curve coordinates, decile calibration). No identifiers, dates, rows, predictions or per-patient SHAP values.
+Calibration-bin cells with fewer than 11 patients removed: 54.
