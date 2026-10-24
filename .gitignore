@@ -1,6 +1,7 @@
 data
 MOVER
 PreOp_XAI_MOVER_code_and_verification
+docs
 
 # Runtime and patient-level outputs stay local.
 .venv/
