@@ -13,7 +13,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 from xgboost import XGBClassifier
 
-from preop_xai.preprocessing import binary_outcomes, feature_matrix, make_preprocessor
+from preopxai.preprocessing import binary_outcomes, feature_matrix, make_preprocessor
 
 
 @dataclass

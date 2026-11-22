@@ -14,7 +14,7 @@ import pandas as pd
 import typer
 import yaml
 
-from preop_xai.config import (
+from preopxai.config import (
     MappingDocument,
     Settings,
     configuration_hash,
@@ -22,7 +22,7 @@ from preop_xai.config import (
     require_review,
     write_json,
 )
-from preop_xai.preprocessing import get_column
+from preopxai.preprocessing import get_column
 
 
 class EnvironmentManifest(TypedDict):
@@ -52,7 +52,7 @@ def _guard_mutation(output: Path) -> None:
 
 
 def _partition(output: Path, partition: str, endpoint: str) -> tuple[pd.DataFrame, pd.Series]:
-    from preop_xai.preprocessing import FEATURES
+    from preopxai.preprocessing import FEATURES
 
     if partition not in {"train", "validation", "test"}:
         raise ValueError("Partition must be train, validation, or test.")
@@ -103,7 +103,7 @@ def environment_manifest(settings: Settings) -> EnvironmentManifest:
         "processor": platform.processor(),
         "packages": {p: importlib.metadata.version(p) for p in packages},
         "seed": settings.seed,
-        "code_sha256": {str(p): file_hash(p) for p in sorted(Path("src/preop_xai").glob("*.py"))},
+        "code_sha256": {str(p): file_hash(p) for p in sorted(Path("src/preopxai").glob("*.py"))},
         "lock_sha256": file_hash(Path("uv.lock")),
         "review_evidence": settings.review_evidence,
         "raw_input_sha256": {name: table["sha256"] for name, table in raw_audit["tables"].items()},
@@ -117,7 +117,7 @@ def _sealed_inputs(settings: Settings, endpoint: str) -> dict[str, str]:
         settings.feature_map,
         settings.outcomes,
         Path("uv.lock"),
-        *sorted(Path("src/preop_xai").glob("*.py")),
+        *sorted(Path("src/preopxai").glob("*.py")),
         *(output / f"{p}.parquet" for p in ("train", "validation", "test")),
         output / endpoint / "models.joblib",
         output / endpoint / "bundle.json",
@@ -149,15 +149,15 @@ def run_stage(
     destination = output / endpoint
     output.mkdir(parents=True, exist_ok=True)
     if stage == "audit":
-        from preop_xai.audit import audit_raw
-        from preop_xai.status import write_status
+        from preopxai.audit import audit_raw
+        from preopxai.status import write_status
 
         typer.echo(str(audit_raw(settings.raw_dir, output / "audit")))
         write_status(settings, stage)
         return
     if stage == "report":
-        from preop_xai.reporting import build_report
-        from preop_xai.status import write_status
+        from preopxai.reporting import build_report
+        from preopxai.status import write_status
 
         write_status(settings, stage)
         typer.echo(str(build_report(output)))
@@ -167,7 +167,7 @@ def run_stage(
         _guard_mutation(output)
     match stage:
         case "build-cohort":
-            from preop_xai.cohort import REVIEW_GATES, build_cohort, load_information
+            from preopxai.cohort import REVIEW_GATES, build_cohort, load_information
 
             information = load_information(settings.raw_dir)
             information.attrs["review"] = dict.fromkeys(REVIEW_GATES, True)
@@ -185,7 +185,7 @@ def run_stage(
                 },
             )
         case "build-labels":
-            from preop_xai.labels import build_labels, load_complications
+            from preopxai.labels import build_labels, load_complications
 
             config = _read_yaml(settings.outcomes)
             if config.get("respiratory", {}).get("enabled"):
@@ -209,7 +209,7 @@ def run_stage(
                 },
             )
         case "build-features":
-            from preop_xai.features import build_features, load_labs
+            from preopxai.features import build_features, load_labs
 
             cohort = pd.read_parquet(output / "cohort.parquet")
             mapping = _read_yaml(settings.feature_map)
@@ -219,7 +219,7 @@ def run_stage(
             features.to_parquet(output / "features.parquet", index=False)
             provenance.to_parquet(output / "provenance.parquet", index=False)
         case "audit-leakage":
-            from preop_xai.features import audit_leakage
+            from preopxai.features import audit_leakage
 
             audit_leakage(
                 pd.read_parquet(output / "cohort.parquet"),
@@ -229,8 +229,8 @@ def run_stage(
             )
             write_json(output / "leakage_audit.json", {"passed": True})
         case "split":
-            from preop_xai.features import audit_leakage
-            from preop_xai.splits import assign_splits
+            from preopxai.features import audit_leakage
+            from preopxai.splits import assign_splits
 
             features = pd.read_parquet(output / "features.parquet")
             audit_leakage(
@@ -264,7 +264,7 @@ def run_stage(
             )
             write_json(output / "manifest.json", environment_manifest(settings))
         case "train":
-            from preop_xai.train import fit_models
+            from preopxai.train import fit_models
 
             x, y = _partition(output, "train", endpoint)
             models = fit_models(x, y, settings.seed, settings.folds)
@@ -297,8 +297,8 @@ def run_stage(
                 }
             ).to_csv(destination / "lr_coefficients.csv", index=False)
         case "calibrate":
-            from preop_xai.calibration import calibrate_models
-            from preop_xai.inference import write_bundle_metadata
+            from preopxai.calibration import calibrate_models
+            from preopxai.inference import write_bundle_metadata
 
             models = joblib.load(destination / "models.joblib")
             x, y = _partition(output, "validation", endpoint)
@@ -320,7 +320,7 @@ def run_stage(
                 feature_mapping=_read_yaml(settings.feature_map),
             )
         case "explain":
-            from preop_xai.explain import explain_models
+            from preopxai.explain import explain_models
 
             if partition == "test":
                 _check_seal(settings, endpoint)
@@ -337,7 +337,7 @@ def run_stage(
                 joblib.load(destination / "models.joblib"), x_train, x, y, target, settings.seed
             )
         case "stability":
-            from preop_xai.stability import run_stability
+            from preopxai.stability import run_stability
 
             _guard_mutation(output)
             x, y = _partition(output, "train", endpoint)
@@ -366,7 +366,7 @@ def run_stage(
                 },
             )
         case "evaluate":
-            from preop_xai.evaluate import evaluate_models
+            from preopxai.evaluate import evaluate_models
 
             if partition != "test":
                 raise ValueError("Final evaluation uses partition test only.")
@@ -392,7 +392,7 @@ def run_stage(
             )
         case _:
             raise ValueError(f"Unknown pipeline stage: {stage}")
-    from preop_xai.status import write_status
+    from preopxai.status import write_status
 
     status_stage = f"explain-{partition}" if stage == "explain" and partition == "test" else stage
     write_status(settings, status_stage, endpoint)

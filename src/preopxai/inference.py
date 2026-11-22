@@ -24,11 +24,11 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils.validation import check_is_fitted
 from xgboost import XGBClassifier
 
-from preop_xai.audit import _numeric_series
-from preop_xai.calibration import calibration_status, raw_scores
-from preop_xai.config import MappingDocument, file_hash, write_json
-from preop_xai.preprocessing import FEATURES, LABS, NUMERIC, get_column
-from preop_xai.train import ModelBundle
+from preopxai.audit import _numeric_series
+from preopxai.calibration import calibration_status, raw_scores
+from preopxai.config import MappingDocument, file_hash, write_json
+from preopxai.preprocessing import FEATURES, LABS, NUMERIC, get_column
+from preopxai.train import ModelBundle
 
 
 class RuntimeMetadata(TypedDict):

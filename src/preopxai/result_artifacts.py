@@ -8,12 +8,12 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
-from preop_xai.result_context import campaign_summary, explanation_figures
-from preop_xai.result_integrity import REPOSITORY_ROOT, inspect_campaign, validate_destination
-from preop_xai.result_io import ArtifactTables, Row, aggregate_path, load_json, save_json, sha256
-from preop_xai.result_io import write_table as _write_table
-from preop_xai.result_manifest import ArtifactEntry, ExportManifest
-from preop_xai.result_report import build_export_report
+from preopxai.result_context import campaign_summary, explanation_figures
+from preopxai.result_integrity import REPOSITORY_ROOT, inspect_campaign, validate_destination
+from preopxai.result_io import ArtifactTables, Row, aggregate_path, load_json, save_json, sha256
+from preopxai.result_io import write_table as _write_table
+from preopxai.result_manifest import ArtifactEntry, ExportManifest
+from preopxai.result_report import build_export_report
 
 
 def _revision() -> str:
@@ -48,9 +48,9 @@ def _entry(output: Path, relative: str, sources: list[str], n=None) -> ArtifactE
 
 def export_results(source: Path, output: Path) -> Path:
     """Export saved evidence into a fresh ignored sibling tree after full preflight."""
-    from preop_xai.result_numerics import TABLE_FIELDS, numerical_tables
-    from preop_xai.result_plots import plot_comparison, plot_endpoint
-    from preop_xai.result_stability import STABILITY_FIELDS, plot_stability, stability_tables
+    from preopxai.result_numerics import TABLE_FIELDS, numerical_tables
+    from preopxai.result_plots import plot_comparison, plot_endpoint
+    from preopxai.result_stability import STABILITY_FIELDS, plot_stability, stability_tables
 
     source, output = Path(source).resolve(), Path(output).resolve()
     validate_destination(source, output)
@@ -101,7 +101,7 @@ def export_results(source: Path, output: Path) -> Path:
             "revision": _revision(),
             "source_sha256": {
                 p.relative_to(REPOSITORY_ROOT).as_posix(): sha256(p)
-                for p in sorted((REPOSITORY_ROOT / "src/preop_xai").glob("*.py"))
+                for p in sorted((REPOSITORY_ROOT / "src/preopxai").glob("*.py"))
             },
             "packages": {
                 package: importlib.metadata.version(package)
@@ -147,7 +147,7 @@ def export_results(source: Path, output: Path) -> Path:
             "stability",
         ):
             manifest["unavailable"].append({**row, "role": role})
-    from preop_xai import result_integrity
+    from preopxai import result_integrity
 
     if source.is_relative_to(result_integrity.ARTIFACTS_ROOT.resolve()):
         manifest["source_campaign"]["storage_path"] = source.relative_to(

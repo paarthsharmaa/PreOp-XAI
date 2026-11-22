@@ -1,14 +1,13 @@
 """Minimal, exact stand-in for the parts of the `shap` API that PreOp-XAI's explain.py and
 stability.py call (LinearExplainer with an Independent masker, interventional TreeExplainer on
-raw log-odds, Explanation, plots.beeswarm). The `shap` package could not be installed in the study
-environment (no package-index access), so the values are computed by `exact_shap`:
+raw log-odds, Explanation, plots.beeswarm). Values are computed by `exact_shap`:
   * linear model + independent masker: phi_j = w_j (x_j - mean_b z_j)  (exact interventional SHAP)
   * tree ensemble, interventional: exact baseline-Shapley per background row, averaged over the
     background (Lundberg et al. 2020, interventional TreeSHAP), from the XGBoost JSON tree dump.
-Both are verified against brute-force Shapley enumeration in tests/test_exact_shap.py."""
+Both are verified against brute-force Shapley enumeration in tests/shap_selftest.py."""
 import numpy as np
 from . import maskers, plots          # noqa: F401
-from exact_shap import linear_shap, tree_shap_interventional
+from preopxai.exact_shap import linear_shap, tree_shap_interventional
 
 __version__ = "exact-in-house-1.0 (shap API subset)"
 

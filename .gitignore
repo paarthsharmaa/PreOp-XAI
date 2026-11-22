@@ -14,9 +14,6 @@
 mover_analysis*.csv
 predictions*.csv
 
-# Local configuration.
-/config/paths.toml
-
 # Python and tooling.
 .venv/
 __pycache__/

@@ -13,11 +13,11 @@ from sklearn.metrics import (
     roc_curve,
 )
 
-from preop_xai.result_io import Row
-from preop_xai.result_operating import check_metric, finite_number
+from preopxai.result_io import Row
+from preopxai.result_operating import check_metric, finite_number
 
 if TYPE_CHECKING:
-    from preop_xai.evaluate import CalibrationParameters, ModelEvaluation
+    from preopxai.evaluate import CalibrationParameters, ModelEvaluation
 
 
 def ranking_row(

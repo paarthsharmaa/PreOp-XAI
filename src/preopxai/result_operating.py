@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from preop_xai.result_io import Row
+from preopxai.result_io import Row
 
 if TYPE_CHECKING:
-    from preop_xai.evaluate import ModelEvaluation
+    from preopxai.evaluate import ModelEvaluation
 
 
 def finite_number(value, label: str) -> float:

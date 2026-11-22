@@ -1,10 +1,10 @@
-"""Feasibility of the protocol's optional respiratory endpoint in MOVER EPIC, using the repository's rule semantics
-(preop_xai.labels.build_labels: one consistent reviewed state per operation; mixed states are 'contradictory').
+"""Feasibility of the protocol's optional respiratory endpoint in MOVER EPIC, using the pipeline's rule semantics
+(preopxai.labels.build_labels: one consistent reviewed state per operation; mixed states are 'contradictory').
 Candidate reviewed rules: AQI post-op complication value 'Respiratory' -> 1, AQI value 'None' -> 0 (any context).
 Aggregate counts only."""
 import json, os, sys
 import pandas as pd
-RAW = sys.argv[1]; W = os.path.expanduser("~/work"); OUT = os.path.expanduser("~/mnt/Downloads/MOVER/preopxai")
+RAW = sys.argv[1]; W = os.environ["PREOPXAI_WORK_DIR"]; OUT = os.environ["PREOPXAI_TABLE_DIR"]
 c = pd.read_csv(f"{RAW}/patient_post_op_complications.csv", dtype=str, keep_default_na=False)
 co = pd.read_pickle(f"{W}/cohort.pkl")
 a = c[c.Element_abbr == "AN Post-op Complications"]

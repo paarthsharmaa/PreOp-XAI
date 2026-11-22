@@ -5,7 +5,7 @@ from typing import TypedDict
 
 import yaml
 
-from preop_xai.config import Settings, file_hash, write_json
+from preopxai.config import Settings, file_hash, write_json
 
 
 class EndpointStatus(TypedDict):

@@ -5,7 +5,7 @@ from typing import Annotated
 
 import typer
 
-from preop_xai.config import load_settings, require_review
+from preopxai.config import load_settings, require_review
 
 app = typer.Typer(no_args_is_help=True, pretty_exceptions_enable=False)
 Config = Annotated[Path, typer.Option("--config", exists=True, dir_okay=False)]
@@ -14,7 +14,7 @@ Config = Annotated[Path, typer.Option("--config", exists=True, dir_okay=False)]
 def _run_stage(
     stage: str, config: Path, endpoint: str = "mortality", partition: str = "validation"
 ) -> None:
-    from preop_xai.workflow import run_stage
+    from preopxai.workflow import run_stage
 
     try:
         run_stage(stage, load_settings(config), endpoint, partition)
@@ -110,7 +110,7 @@ def export_results(
     output: Annotated[Path, typer.Option()],
 ) -> None:
     """Export completed saved evidence read-only into a fresh artifacts directory."""
-    from preop_xai.result_artifacts import export_results as export
+    from preopxai.result_artifacts import export_results as export
 
     try:
         manifest = export(source, output)
@@ -129,7 +129,7 @@ def predict(
     research_only: Annotated[bool, typer.Option("--research-only")] = False,
 ) -> None:
     """Predict canonical feature CSVs using trusted saved preprocessing, without fitting."""
-    from preop_xai.inference import predict_file
+    from preopxai.inference import predict_file
 
     try:
         predict_file(bundle, input_path, output, model, research_only)
@@ -144,7 +144,7 @@ def demo(
     output: Annotated[Path, typer.Option()] = Path("artifacts/demo"), seed: int = 2026
 ) -> None:
     """Run the full pipeline on synthetic patients, never clinical results."""
-    from preop_xai.demo import run_demo
+    from preopxai.demo import run_demo
 
     run_demo(output, seed)
 

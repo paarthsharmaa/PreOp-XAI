@@ -4,10 +4,10 @@ from pathlib import Path
 
 import numpy as np
 
-from preop_xai.result_bins import calibration_bins
-from preop_xai.result_curves import curve_tables, ranking_row
-from preop_xai.result_io import ArtifactTables, Json, Row, load_json
-from preop_xai.result_operating import check_count, check_metric, operating_tables
+from preopxai.result_bins import calibration_bins
+from preopxai.result_curves import curve_tables, ranking_row
+from preopxai.result_io import ArtifactTables, Json, Row, load_json
+from preopxai.result_operating import check_count, check_metric, operating_tables
 
 _COLUMNS: dict[str, str] = {
     "discrimination_calibration.csv": (

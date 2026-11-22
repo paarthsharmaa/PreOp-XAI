@@ -7,8 +7,8 @@ import os
 from pathlib import Path
 from urllib.parse import quote
 
-from preop_xai.result_io import aggregate_path
-from preop_xai.result_manifest import ExportManifest, linked_source, validate_manifest
+from preopxai.result_io import aggregate_path
+from preopxai.result_manifest import ExportManifest, linked_source, validate_manifest
 
 REPORT_MAP = {
     "campaign_summary": "Tables 5.12-5.13, 5.16, 5.21-5.22",

@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TypedDict
 
-from preop_xai.result_io import Json, Scalar, aggregate_path, load_json, sha256
+from preopxai.result_io import Json, Scalar, aggregate_path, load_json, sha256
 
 
 class ArtifactEntry(TypedDict):
@@ -116,7 +116,7 @@ def validate_manifest(output: Path, manifest: ExportManifest) -> None:
 
 
 def linked_source(output: Path, manifest: ExportManifest, entry: SourceLink) -> Path:
-    from preop_xai import result_integrity
+    from preopxai import result_integrity
 
     source = aggregate_path(
         result_integrity.ARTIFACTS_ROOT, manifest["source_campaign"]["storage_path"]

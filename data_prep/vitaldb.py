@@ -1,6 +1,6 @@
 """VitalDB adapter for the PreOp-XAI protocol (cohort, labels, fixed clinical feature matrix).
 
-Rules mirror the PreOp-XAI protocol v1.1 (docs/protocol.md) as far as VitalDB allows:
+Rules follow the PreOp-XAI protocol (docs/METHODS.md) as far as VitalDB allows:
   * eligibility: age >= 18 years, valid anesthesia boundary (aneend > anestart), ASA VI excluded;
   * one indexed operation per patient, chosen BEFORE any outcome is looked at. VitalDB times are
     relative to each case's own start, so cross-case chronology is not recoverable; the case with the
@@ -30,8 +30,11 @@ def build(path):
     raw = raw.rename(columns={"case_id": "caseid"})   # the two public mirrors name the first column differently
     flow = {"source_cases": int(len(raw)), "source_patients": int(raw.subjectid.nunique())}
     df = raw.copy()
-    df["age_years"] = pd.to_numeric(df.age.astype(str).str.replace(">89", "90", regex=False), errors="coerce")
-    flow["age_top_coded_gt89_set_to_90"] = int((raw.age.astype(str) == ">89").sum())
+    # Ages above 89 are top-coded to 90 whether the source table stores ">89" or the exact age.
+    numeric_age = pd.to_numeric(df.age.astype(str).str.replace(">89", "90", regex=False), errors="coerce")
+    top_coded = (raw.age.astype(str) == ">89") | (pd.to_numeric(raw.age, errors="coerce") > 89)
+    df["age_years"] = numeric_age.where(~top_coded, 90.0)
+    flow["age_top_coded_gt89_set_to_90"] = int(top_coded.sum())
     steps = [("age_under_18_or_missing", ~(df.age_years >= 18)),
              ("invalid_anesthesia_boundary", ~(df.aneend > df.anestart)),
              ("asa_vi", df.asa == 6)]
@@ -57,7 +60,7 @@ def build(path):
                       "sex": idx.sex.astype(object),
                       "asa": idx.asa.map(lambda v: "unknown" if pd.isna(v) else str(int(v))).astype(object)})
     # Missing ASA is encoded as the explicit category 'unknown' here, exactly as
-    # preop_xai.preprocessing.feature_matrix does at training time. (The repository's explain.py
+    # preopxai.preprocessing.feature_matrix does at training time. (explain.py
     # transforms the raw frame without feature_matrix, so a NaN would otherwise be encoded
     # differently at explanation time and break SHAP additivity.)
     for concept, col in LAB_MAP.items():
@@ -71,7 +74,7 @@ def build(path):
 
 
 def assign_splits(labels, seed=2026):
-    """Verbatim logic of preop_xai.splits.assign_splits (70/15/15, stratified on known mortality;
+    """Same logic as preopxai.splits.assign_splits (70/15/15, stratified on known mortality;
     unknown labels by seeded largest-remainder allocation)."""
     from sklearn.model_selection import train_test_split
     result = labels.copy().sort_values(["patient_id", "operation_id"], kind="stable").reset_index(drop=True)

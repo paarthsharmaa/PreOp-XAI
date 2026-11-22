@@ -8,8 +8,8 @@ from scipy.special import expit
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import LogisticRegression
 
-from preop_xai.preprocessing import binary_outcomes, feature_matrix
-from preop_xai.train import ModelBundle
+from preopxai.preprocessing import binary_outcomes, feature_matrix
+from preopxai.train import ModelBundle
 
 
 def raw_scores(bundle: ModelBundle, X: pd.DataFrame) -> np.ndarray:

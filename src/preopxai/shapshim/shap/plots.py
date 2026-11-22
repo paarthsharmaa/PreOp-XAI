@@ -1,4 +1,4 @@
-"""Beeswarm is only an auxiliary repository figure; the paper's figures are drawn separately."""
+"""Beeswarm is only an auxiliary figure; the report figures are drawn separately."""
 import matplotlib.pyplot as plt
 import numpy as np
 

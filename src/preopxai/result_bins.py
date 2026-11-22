@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from preop_xai.result_io import Json, Row
+from preopxai.result_io import Json, Row
 
 
 def calibration_bins(

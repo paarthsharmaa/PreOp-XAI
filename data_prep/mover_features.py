@@ -2,7 +2,7 @@
 Lab identity is fixed by LOINC code and unit (reviewed map below). Output keeps no identifiers or dates."""
 import json, os, sys
 import numpy as np, pandas as pd
-W = os.path.expanduser("~/work"); OUT = os.path.expanduser("~/mnt/Downloads/MOVER/preopxai")
+W = os.environ["PREOPXAI_WORK_DIR"]; OUT = os.environ["PREOPXAI_TABLE_DIR"]
 MAP = {"hemoglobin": ({"718-7", "30350-3", "14775-1"}, {"G/DL", "g/dL"}, 0.0, 30.0),
        "platelets": ({"26515-7", "778-1"}, {"THOUS/MCL", "THOUS/ CU MM"}, 0.0, 3000.0),
        "creatinine": ({"2160-0", "38483-4"}, {"mg/dL", "MG/DL"}, 0.0, 30.0),

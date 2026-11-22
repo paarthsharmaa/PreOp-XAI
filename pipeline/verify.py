@@ -1,25 +1,30 @@
-"""Check real generated artifacts against reference scientific outputs.
+"""Compare a completed run with the committed aggregate results.
 
-Run: uv run --locked python scripts/reproduce.py verify
+Run: uv run --locked python -m pipeline.cli verify
 """
 
 from __future__ import annotations
 
 import json
 import math
+from pathlib import Path
+import subprocess
 import sys
 
 from pydantic import JsonValue, TypeAdapter
 
-from scripts.reproduce import BUNDLE, LOGS, OUT, RUNNER, check, run
+from pipeline.cli import check
+from pipeline.config import ROOT, load_paths
 
 JSON = JsonValue
-IGNORED = {"runtime_s"}
+IGNORED = {"runtime_s", "code_commit"}
+RELATIVE_TOLERANCE = 1e-8
+ABSOLUTE_TOLERANCE = 1e-10
 
 
-def differences(reference: JSON, actual: JSON, path: str = "") -> list[str]:
+def differences(expected: JSON, actual: JSON, path: str = "") -> list[str]:
     """Compare semantic results at tight numeric tolerance, retaining every mismatch."""
-    match reference, actual:
+    match expected, actual:
         case dict() as left, dict() as right:
             found: list[str] = []
             for key in sorted((left.keys() | right.keys()) - IGNORED):
@@ -34,39 +39,49 @@ def differences(reference: JSON, actual: JSON, path: str = "") -> list[str]:
             return [item for index, (a, b) in enumerate(zip(left, right))
                     for item in differences(a, b, f"{path}[{index}]")]
         case int() | float(), int() | float():
-            return [] if math.isclose(reference, actual, rel_tol=1e-8, abs_tol=1e-10) else [
-                f"{path}: reference={reference}, actual={actual}"]
+            close = math.isclose(expected, actual, rel_tol=RELATIVE_TOLERANCE,
+                                 abs_tol=ABSOLUTE_TOLERANCE)
+            return [] if close else [f"{path}: expected={expected}, actual={actual}"]
         case _:
-            return [] if reference == actual else [f"{path}: reference={reference}, actual={actual}"]
+            return [] if expected == actual else [f"{path}: expected={expected}, actual={actual}"]
+
+
+def artifact_pairs() -> dict[str, tuple[Path, Path]]:
+    """Map every committed aggregate JSON to its regenerated counterpart."""
+    paths = load_paths()
+    pairs = {source.relative_to(ROOT / "results").as_posix():
+             (source, paths.export / source.relative_to(ROOT / "results"))
+             for source in sorted((ROOT / "results").rglob("*.json"))
+             if source.name != "summary.json"}
+    pairs["summary.json"] = (ROOT / "results/summary.json", paths.report / "results/summary.json")
+    for name in ("determinism_check.json", "split_check.json"):
+        pairs[name] = (ROOT / "verification" / name, paths.export / name)
+    return pairs
 
 
 def main() -> None:
-    """Run the existing brute-force SHAP regression and compare every aggregate artifact."""
+    """Run the brute-force SHAP check and compare every aggregate artifact."""
     check()
-    run([sys.executable, "tests/test_exact_shap.py"], RUNNER, "exact-shap")
-    report: dict[str, list[str]] = {}
+    paths = load_paths()
+    selftest = subprocess.run([sys.executable, str(ROOT / "tests/shap_selftest.py")],
+                              capture_output=True, text=True, check=False)
+    print(selftest.stdout, end="")
+    selftest.check_returncode()
     adapter: TypeAdapter[JsonValue] = TypeAdapter(JsonValue)
-    # Compare numerical evidence, not OS metadata, wall-clock logs or private arrays.
-    for source in sorted((BUNDLE / "results").rglob("*.json")):
-        relative = source.relative_to(BUNDLE / "results")
-        if relative.as_posix() in {"environment.json", "summary.json"}:
-            continue
-        generated = RUNNER / "export" / relative
+    report: dict[str, list[str]] = {}
+    for name, (committed, generated) in artifact_pairs().items():
         if not generated.is_file():
-            report[str(relative)] = ["missing regenerated artifact"]
+            report[name] = ["missing regenerated artifact"]
             continue
-        report[str(relative)] = differences(adapter.validate_json(source.read_text()),
-                                            adapter.validate_json(generated.read_text()))
-    summary_reference = adapter.validate_json((BUNDLE / "results/summary.json").read_text())
-    summary_actual = adapter.validate_json((OUT / "publication/results/summary.json").read_text())
-    report["summary.json"] = differences(summary_reference, summary_actual)
-    _ = (LOGS / "reference-comparison.json").write_text(json.dumps(report, indent=2))
-    failed = {name: values for name, values in report.items() if values}
-    print(f"Compared {len(report)} artifacts; {len(failed)} differ; "
-          + f"full paths in {LOGS / 'reference-comparison.json'}")
+        report[name] = differences(adapter.validate_json(committed.read_text()),
+                                   adapter.validate_json(generated.read_text()))
+    output = paths.logs / "results-comparison.json"
+    _ = output.write_text(json.dumps(report, indent=2))
+    failed = [name for name, values in report.items() if values]
+    print(f"Compared {len(report)} artifacts; {len(failed)} differ; full paths in {output}")
     if failed:
         raise SystemExit(1)
-    print("PASS reference comparison")
+    print("PASS results comparison")
 
 
 if __name__ == "__main__":

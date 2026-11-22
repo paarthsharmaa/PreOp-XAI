@@ -19,9 +19,9 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
-from preop_xai.calibration import calibration_status, probabilities
-from preop_xai.preprocessing import LABS, binary_outcomes
-from preop_xai.train import ModelBundle
+from preopxai.calibration import calibration_status, probabilities
+from preopxai.preprocessing import LABS, binary_outcomes
+from preopxai.train import ModelBundle
 
 
 class CalibrationParameters(TypedDict):

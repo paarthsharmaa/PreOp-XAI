@@ -11,11 +11,11 @@ import typer
 import yaml
 from scipy.special import expit
 
-from preop_xai.cohort import INFORMATION_COLUMNS, REVIEW_GATES
-from preop_xai.config import FeatureMapping, OutcomeMapping, load_settings, write_json
-from preop_xai.labels import COMPLICATION_COLUMNS
-from preop_xai.preprocessing import LABS
-from preop_xai.workflow import run_stage
+from preopxai.cohort import INFORMATION_COLUMNS, REVIEW_GATES
+from preopxai.config import FeatureMapping, OutcomeMapping, load_settings, write_json
+from preopxai.labels import COMPLICATION_COLUMNS
+from preopxai.preprocessing import LABS
+from preopxai.workflow import run_stage
 
 
 class LabRecord(TypedDict):

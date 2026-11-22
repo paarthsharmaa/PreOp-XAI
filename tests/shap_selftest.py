@@ -1,10 +1,10 @@
-"""Verify exact_shap against brute-force Shapley enumeration (run: python tests/test_exact_shap.py)."""
+"""Verify exact_shap against brute-force Shapley enumeration (run: python tests/shap_selftest.py)."""
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))
 import numpy as np
 import xgboost as xgb
 from sklearn.linear_model import LogisticRegression
-from exact_shap import tree_shap_interventional, linear_shap, brute_force_interventional
+from preopxai.exact_shap import tree_shap_interventional, linear_shap, brute_force_interventional
 
 rng = np.random.default_rng(0)
 worst = 0.0

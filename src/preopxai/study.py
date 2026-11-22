@@ -1,6 +1,6 @@
 """PreOp-XAI protocol on the de-identified MOVER EPIC analysis table (one endpoint, one split seed), with external
-validation of the frozen models on VitalDB. Uses the repository's modules unchanged (preop_xai.train / calibration /
-evaluate / explain / stability); the SHAP back end is the exact implementation in exact_shap.py (via shapshim).
+validation of the frozen models on VitalDB. Uses preopxai.train / calibration / evaluate / explain / stability; the
+SHAP back end is the exact implementation in exact_shap.py (via shapshim).
 
 Modes: full (1,000 bootstraps, SHAP, 10 stability refits, VitalDB external validation, figure data),
        perf (1,000 bootstraps only), light (point estimates only; used for the repeated splits).
@@ -13,16 +13,16 @@ import warnings
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path[:0] = [str(HERE), str(HERE / "shapshim")]
+sys.path.insert(0, str(HERE / "shapshim"))
 import matplotlib
 matplotlib.use("Agg")
 import numpy as np
 import pandas as pd
 
-from cohort_vitaldb import assign_splits, build as build_vitaldb
-from preop_xai.calibration import calibrate_models, calibration_status, probabilities, raw_scores
-from preop_xai.evaluate import evaluate_models
-from preop_xai.train import fit_models
+from data_prep.vitaldb import assign_splits, build as build_vitaldb
+from preopxai.calibration import calibrate_models, calibration_status, probabilities, raw_scores
+from preopxai.evaluate import evaluate_models
+from preopxai.train import fit_models
 
 LABS = ["hemoglobin", "platelets", "creatinine", "bun", "sodium", "potassium", "glucose"]
 FEATURES = ["age", "sex", "asa"] + LABS
@@ -104,11 +104,11 @@ def curves(y, p):
             "recall": rc.round(5).tolist()}
 
 
-def main(endpoint, seed, out, mode="full", table=None):
+def main(endpoint, seed, out, table, mode="full", vitaldb=None):
     t0 = time.time()
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
-    table = Path(table or HERE / "mover_analysis.csv")
+    table = Path(table)
     X, labels = load_table(table)
     splits = assign_splits(labels, seed=seed)
     X = X.loc[labels.sort_values(["patient_id", "operation_id"], kind="stable").index].reset_index(drop=True)
@@ -132,8 +132,8 @@ def main(endpoint, seed, out, mode="full", table=None):
                          for k, b in bundles.items()}
     info["evaluation"] = evaluate_models(bundles, Xte, yte, out, bootstraps=1 if mode == "light" else 1000, seed=2026)
     if mode == "full":
-        from preop_xai.explain import explain_models
-        from preop_xai.stability import run_stability
+        from preopxai.explain import explain_models
+        from preopxai.stability import run_stability
         info["explain"] = explain_models(bundles, Xtr, Xva, yva.values, out / "explain", seed=2026)
         info["stability"] = run_stability(bundles, Xtr, ytr.values, Xva, out / "stability", refits=10, seed=2026)
         info["characteristics"] = characteristics(X, labels[endpoint].to_numpy().astype(int))
@@ -141,7 +141,7 @@ def main(endpoint, seed, out, mode="full", table=None):
         names = list(lr.named_steps["preprocess"].get_feature_names_out())
         info["lr_coefficients"] = dict(zip(names, lr.named_steps["model"].coef_[0].tolist()))
         # ---- external validation of the frozen, MOVER-recalibrated models on VitalDB
-        Xv, lv, flow_v, _ = build_vitaldb(HERE / "data" / "vitaldb_clinical_data.csv")
+        Xv, lv, flow_v, _ = build_vitaldb(vitaldb)
         kv = lv[endpoint].notna().values
         Xv, yv = Xv[kv].reset_index(drop=True), lv.loc[kv, endpoint].astype(int).reset_index(drop=True)
         info["external_vitaldb"] = evaluate_models(bundles, Xv, yv, out / "external_vitaldb", bootstraps=1000, seed=2026)
@@ -167,7 +167,7 @@ def main(endpoint, seed, out, mode="full", table=None):
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    r = main(a[0], int(a[1]), a[2], mode=a[3] if len(a) > 3 else "full", table=a[4] if len(a) > 4 else None)
+    r = main(a[0], int(a[1]), a[2], a[3], mode=a[4] if len(a) > 4 else "full", vitaldb=a[5] if len(a) > 5 else None)
     ev = r["evaluation"]["models"]
     print(r["endpoint"], r["split_seed"], r["partition_events"], f"{r['runtime_s']}s",
           {k: round(v["raw"]["auroc"], 3) for k, v in ev.items()})

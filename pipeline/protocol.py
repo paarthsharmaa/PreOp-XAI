@@ -1,4 +1,4 @@
-"""One-command runner for the PreOp-XAI MOVER study. Run from this folder:  python mover_run.py
+"""PreOp-XAI MOVER protocol. Run through the project CLI:  uv run --locked python -m pipeline.cli protocol
 
 Steps (each is skipped if its output already exists, so the run can be resumed after an interruption):
   1. environment check and exact-SHAP self-test (brute-force comparison)
@@ -8,9 +8,9 @@ Steps (each is skipped if its output already exists, so the run can be resumed a
   4. determinism check: the main mortality analysis is run a second time and compared
   5. split check: test-set event counts for split seeds 1-1000 (splitting only)
   6. repeated splits: whole protocol for split seeds 1-100, both endpoints (parallel)
-  7. export: aggregate results only -> export/preopxai_mover_results.zip
+  7. export: aggregate results only -> outputs/export/preopxai_mover_results.zip
 
-Patient-level files (predictions, SHAP arrays, local explanation plots) stay in runs/ on this computer and are
+Patient-level files (predictions, SHAP arrays, local explanation plots) stay in outputs/runs/ and are
 never copied to the export.
 """
 import json
@@ -26,11 +26,13 @@ import warnings
 import zipfile
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
-RUNS, EXPORT = HERE / "runs", HERE / "export"
-TABLE, TABLE_LAG0 = HERE / "mover_analysis.csv", HERE / "mover_analysis_lag0h.csv"
+from pipeline.config import ROOT, load_paths
+
+PATHS = load_paths()
+RUNS, EXPORT = PATHS.runs, PATHS.export
+TABLE, TABLE_LAG0 = PATHS.tables / "mover_analysis.csv", PATHS.tables / "mover_analysis_lag0h.csv"
 ENDPOINTS = ("mortality", "icu")
-N_REPEATS = int(os.environ.get("PREOPXAI_TEST_REPEATS", 100))   # 100 = protocol; override only for testing
+N_REPEATS = 100
 EXPECTED = {"scikit-learn": "1.8.0", "xgboost": "2.1.4"}
 
 
@@ -48,10 +50,9 @@ def repeat_one(job):
     if target.exists():
         return endpoint, seed, None
     warnings.simplefilter("ignore")
-    sys.path.insert(0, str(HERE))
-    from mover_study import main
+    from preopxai.study import main
     with tempfile.TemporaryDirectory() as tmp:
-        r = main(endpoint, seed, tmp, mode="light", table=table)
+        r = main(endpoint, seed, tmp, table, mode="light")
     ev = r["evaluation"]
     keep = {"seed": seed, "partition_events": r["partition_events"], "selection": {
         k: {kk: v[kk] for kk in ("parameters", "cv_average_precision", "threshold", "calibration_status")}
@@ -76,7 +77,7 @@ def step_environment():
         try:
             env["packages"][p] = importlib.import_module(mod).__version__
         except ImportError:
-            raise SystemExit(f"Package {p} is missing. Install with: pip install -r requirements.txt")
+            raise SystemExit(f"Package {p} is missing. Install with: uv sync --locked")
     for p, v in EXPECTED.items():
         if env["packages"][p] != v:
             log(f"WARNING: {p} {env['packages'][p]} installed; the study was prepared with {v}.")
@@ -84,27 +85,28 @@ def step_environment():
         raise SystemExit("Python 3.11 or newer is required (the repository uses 3.11 syntax).")
     import hashlib
     env["inputs"] = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-                     for p in (TABLE, TABLE_LAG0, HERE / "data" / "vitaldb_clinical_data.csv")}
-    env["repo_commit"] = (HERE / "preop_xai" / "REPO_COMMIT.txt").read_text().strip()
+                     for p in (TABLE, TABLE_LAG0, PATHS.vitaldb_clinical)}
+    env["code_commit"] = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True,
+                                        text=True).stdout.strip()
     (RUNS / "environment.json").write_text(json.dumps(env, indent=1))
     log(f"environment: Python {platform.python_version()}, " +
         ", ".join(f"{k} {v}" for k, v in env["packages"].items()))
-    t = subprocess.run([sys.executable, str(HERE / "tests" / "test_exact_shap.py")], capture_output=True, text=True)
+    t = subprocess.run([sys.executable, str(ROOT / "tests" / "shap_selftest.py")], capture_output=True, text=True)
     (RUNS / "shap_selftest.txt").write_text(t.stdout + t.stderr)
     if t.returncode != 0 or "PASS" not in t.stdout:
-        raise SystemExit("Exact-SHAP self-test failed; see runs/shap_selftest.txt")
+        raise SystemExit("Exact-SHAP self-test failed; see outputs/runs/shap_selftest.txt")
     log("exact-SHAP self-test passed: " + t.stdout.strip().splitlines()[-2])
 
 
 def step_main():
-    from mover_study import main
+    from preopxai.study import main
     for e in ENDPOINTS:
         out = RUNS / f"main_{e}"
         if (out / "study.json").exists():
             log(f"main {e}: already done")
             continue
         log(f"main {e}: started (about 5-15 minutes)")
-        r = main(e, 2026, out, mode="full", table=TABLE)
+        r = main(e, 2026, out, TABLE, mode="full", vitaldb=PATHS.vitaldb_clinical)
         m, x = r["evaluation"]["models"], r["external_vitaldb"]["models"]
         log(f"main {e}: done in {r['runtime_s']} s; test events {r['partition_events']['test']}; AUROC test "
             f"LR {m['lr']['raw']['auroc']:.3f} XGB {m['xgboost']['raw']['auroc']:.3f}; VitalDB "
@@ -112,13 +114,13 @@ def step_main():
 
 
 def step_lag0():
-    from mover_study import main
+    from preopxai.study import main
     for e in ENDPOINTS:
         out = RUNS / f"lag0_{e}"
         if (out / "study.json").exists():
             log(f"lag-0 {e}: already done")
             continue
-        r = main(e, 2026, out, mode="perf", table=TABLE_LAG0)
+        r = main(e, 2026, out, TABLE_LAG0, mode="perf")
         m = r["evaluation"]["models"]
         log(f"lag-0 {e}: AUROC LR {m['lr']['raw']['auroc']:.3f} XGB {m['xgboost']['raw']['auroc']:.3f}")
 
@@ -132,13 +134,13 @@ def _strip(d):
 
 
 def step_rerun():
-    from mover_study import main
+    from preopxai.study import main
     target = RUNS / "determinism_check.json"
     if target.exists():
         log("determinism check: already done")
         return
     log("determinism check: re-running the main mortality analysis")
-    r2 = main("mortality", 2026, RUNS / "rerun_mortality", mode="full", table=TABLE)
+    r2 = main("mortality", 2026, RUNS / "rerun_mortality", TABLE, mode="full", vitaldb=PATHS.vitaldb_clinical)
     r1 = json.loads((RUNS / "main_mortality" / "study.json").read_text())
     r2 = json.loads(json.dumps(r2, default=str))
     same = _strip(r1) == _strip(r2)
@@ -169,8 +171,8 @@ def step_split_check():
         log("split check: already done")
         return
     import numpy as np
-    from cohort_vitaldb import assign_splits
-    from mover_study import load_table
+    from data_prep.vitaldb import assign_splits
+    from preopxai.study import load_table
     _, labels = load_table(TABLE)
 
     def events(seed):
@@ -228,14 +230,14 @@ def _suppress(d):
 def step_export():
     if EXPORT.exists():
         shutil.rmtree(EXPORT)
-    EXPORT.mkdir()
+    EXPORT.mkdir(parents=True)
     files = {}
     for name in ("environment.json", "shap_selftest.txt", "determinism_check.json", "split_check.json", "run_log.txt"):
         files[name] = RUNS / name
     for name in ("mover_cohort_flow.json", "mover_feature_stats.json", "mover_feature_stats_lag0h.json",
                  "mover_respiratory_feasibility.json"):
-        if (HERE / name).exists():
-            files[f"cohort/{name}"] = HERE / name
+        if (PATHS.tables / name).exists():
+            files[f"cohort/{name}"] = PATHS.tables / name
     for run in [f"main_{e}" for e in ENDPOINTS] + [f"lag0_{e}" for e in ENDPOINTS] + ["rerun_mortality"]:
         for rel in ("study.json", "metrics.json", "intervals.csv", "performance.csv", "explain/explain.json",
                     "stability/stability.json", "external_vitaldb/metrics.json", "external_vitaldb/intervals.csv"):
@@ -260,13 +262,12 @@ def step_export():
         for p in sorted(EXPORT.rglob("*")):
             if p.is_file() and p != z:
                 zf.write(p, p.relative_to(EXPORT))
-    log(f"export: {len(files)} files -> {z} ({z.stat().st_size // 1024} KB)")
+    log(f"export: {len(files)} files -> {z.name} ({z.stat().st_size // 1024} KB)")
 
 
 if __name__ == "__main__":
     mp.freeze_support()
-    RUNS.mkdir(exist_ok=True)
-    sys.path[:0] = [str(HERE), str(HERE / "shapshim")]
+    RUNS.mkdir(parents=True, exist_ok=True)
     warnings.simplefilter("ignore")
     only = sys.argv[1:]
     steps = [("environment", step_environment), ("main", step_main), ("lag0", step_lag0), ("rerun", step_rerun),

@@ -45,8 +45,8 @@ def build_report(output: Path, export_manifest: Path | None = None) -> Path:
     """
     output = Path(output)
     if export_manifest is not None:
-        from preop_xai.result_manifest import read_manifest
-        from preop_xai.result_report import build_export_report
+        from preopxai.result_manifest import read_manifest
+        from preopxai.result_report import build_export_report
 
         return build_export_report(output, read_manifest(export_manifest))
     output.mkdir(parents=True, exist_ok=True)

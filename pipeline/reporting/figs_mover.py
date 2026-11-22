@@ -1,14 +1,15 @@
 """All figures, drawn only from the aggregate outputs exported from the MOVER run (results/...).
 Fig. 1 cohort flow and protocol; Fig. 2 ROC/PR (MOVER test and VitalDB external); Fig. 3 decile calibration;
 Fig. 4 grouped SHAP importance over paired refits.
-Run from the project root: python3 code/figs_mover.py"""
+Run through the project CLI: python -m pipeline.cli report"""
 import glob
 import json
 import sys
+from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, "code")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from figstyle import plt, COL1, COL2, panel
 from matplotlib.patches import FancyArrowPatch, Rectangle
 

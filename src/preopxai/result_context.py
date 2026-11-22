@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from preop_xai.result_io import Row, aggregate_path, load_json
+from preopxai.result_io import Row, aggregate_path, load_json
 
 
 def explanation_figures(source: Path, endpoint: str) -> tuple[list[tuple[Path, str]], list[Row]]:

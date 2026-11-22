@@ -1,6 +1,6 @@
-"""Execute the unchanged reference in a separate, resumable output workspace.
+"""PreOp-XAI command line.
 
-Run: uv run --locked python scripts/reproduce.py all
+Run: uv run --locked python -m pipeline.cli check|prepare|protocol [steps...]|report|verify|all
 """
 
 from __future__ import annotations
@@ -10,26 +10,20 @@ import importlib.metadata
 import json
 import os
 from pathlib import Path
-import shutil
 import subprocess
 import sys
-from typing import ClassVar, Final
+import tomllib
+from typing import Final
 
-from pydantic import BaseModel, ConfigDict, TypeAdapter
+from pipeline.config import ROOT, load_paths
 
-ROOT: Final = Path(__file__).resolve().parents[1]
-SOURCE: Final = ROOT / "MOVER/preopxai"
-BUNDLE: Final = ROOT / "PreOp_XAI_MOVER_code_and_verification"
-OUT: Final = ROOT / "outputs/reproduction"
-RUNNER: Final = OUT / "runner"
-LOGS: Final = OUT / "logs"
-
-class ReferenceEnvironment(BaseModel):
-    """Machine-consumed dependency and input-hash evidence."""
-
-    model_config: ClassVar[ConfigDict] = ConfigDict(frozen=True)
-    packages: dict[str, str]
-    inputs: dict[str, str]
+MOVER_FILES: Final = ("patient_information.csv", "patient_labs.csv",
+                      "patient_post_op_complications.csv")
+VITALDB_COLUMNS: Final = frozenset({
+    "caseid", "subjectid", "anestart", "aneend", "adm", "dis", "icu_days", "death_inhosp",
+    "age", "sex", "asa", "preop_hb", "preop_plt", "preop_cr", "preop_bun", "preop_na",
+    "preop_k", "preop_gluc"})
+SCIENTIFIC_PACKAGES: Final = ("scikit-learn", "xgboost", "numpy", "pandas", "scipy", "matplotlib")
 
 
 def digest(path: Path) -> str:
@@ -38,68 +32,56 @@ def digest(path: Path) -> str:
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
-def run(args: list[str], cwd: Path, name: str) -> None:
-    """Capture a real subprocess's combined output and propagate its failure."""
-    LOGS.mkdir(parents=True, exist_ok=True)
+def run(args: list[str], name: str) -> None:
+    """Capture a subprocess's combined output and propagate its failure."""
+    logs = load_paths().logs
+    logs.mkdir(parents=True, exist_ok=True)
     print(f"RUN {name}: {' '.join(args)}", flush=True)
-    with (LOGS / f"{name}.log").open("w") as log:
-        result = subprocess.run(args, cwd=cwd, stdout=log, stderr=subprocess.STDOUT,
-                                check=False)
-    print(f"EXIT {name}: {result.returncode}; {LOGS / (name + '.log')}", flush=True)
+    with (logs / f"{name}.log").open("w") as log:
+        result = subprocess.run(args, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, check=False)
+    print(f"EXIT {name}: {result.returncode}; {logs / (name + '.log')}", flush=True)
     result.check_returncode()
 
 
-def stage() -> None:
-    """Copy reference source byte-for-byte, never historical completed runs."""
-    RUNNER.mkdir(parents=True, exist_ok=True)
-    for path in SOURCE.iterdir():
-        if path.is_file() and path.suffix in {".py", ".txt", ".bat"}:
-            _ = shutil.copy2(path, RUNNER / path.name)
-    for name in ("preop_xai", "shapshim", "data_prep", "tests"):
-        _ = shutil.copytree(SOURCE / name, RUNNER / name, dirs_exist_ok=True,
-                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
-    for relative in ("mover_analysis.csv", "mover_analysis_lag0h.csv",
-                     "data/vitaldb_clinical_data.csv"):
-        target = RUNNER / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        if not target.exists():
-            _ = shutil.copy2(SOURCE / relative, target)
-    for path in SOURCE.glob("mover_*.json"):
-        if not (RUNNER / path.name).exists():
-            _ = shutil.copy2(path, RUNNER / path.name)
+def pinned_versions() -> dict[str, str]:
+    """Read the exact scientific dependency pins from pyproject.toml."""
+    with (ROOT / "pyproject.toml").open("rb") as stream:
+        dependencies: list[str] = tomllib.load(stream)["project"]["dependencies"]
+    pins = dict(item.split("==", 1) for item in dependencies)
+    return {name: pins[name] for name in SCIENTIFIC_PACKAGES}
 
 
 def check() -> None:
-    """Check dependencies, real input provenance and immutable source hashes."""
-    expected = ReferenceEnvironment.model_validate_json(
-        (BUNDLE / "verification/environment.json").read_text())
-    versions = {name: importlib.metadata.version(name)
-                for name in expected.packages}
-    if versions != expected.packages:
+    """Check dependency versions and the presence and shape of the raw inputs."""
+    paths = load_paths()
+    expected = pinned_versions()
+    versions = {name: importlib.metadata.version(name) for name in expected}
+    if versions != expected:
         raise SystemExit(f"Dependency mismatch: {versions}")
-    inputs = {name: digest(SOURCE / ("data/" + name if name.startswith("vitaldb") else name))
-              for name in expected.inputs}
-    if inputs != expected.inputs:
-        raise SystemExit(f"Reference input hash mismatch: {inputs}")
-    manifest = TypeAdapter(dict[str, str]).validate_json(
-        (ROOT / "reference-source.sha256.json").read_text())
-    changed = [name for name, sha in manifest.items() if digest(ROOT / name) != sha]
-    if changed:
-        raise SystemExit(f"Reference source changed: {changed}")
-    metadata = {"python": sys.version, "versions": versions, "inputs": inputs,
-                "source_files_verified": len(manifest), "cpu_count": os.cpu_count(),
+    missing = [str(paths.mover_raw / name) for name in MOVER_FILES
+               if not (paths.mover_raw / name).is_file()]
+    if not paths.vitaldb_clinical.is_file():
+        missing.append(str(paths.vitaldb_clinical))
+    if missing:
+        raise SystemExit("Missing input files (see data/README.md): " + ", ".join(missing))
+    with paths.vitaldb_clinical.open() as stream:
+        columns = set(stream.readline().strip().split(","))
+    if absent := VITALDB_COLUMNS - columns:
+        raise SystemExit(f"VitalDB clinical table lacks columns: {sorted(absent)}")
+    metadata = {"python": sys.version, "versions": versions, "cpu_count": os.cpu_count(),
+                "mover_raw": str(paths.mover_raw), "vitaldb_clinical": str(paths.vitaldb_clinical),
+                "vitaldb_sha256": digest(paths.vitaldb_clinical),
                 "thread_environment": {key: os.environ.get(key) for key in
                                        ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS",
                                         "MKL_NUM_THREADS", "PREOPXAI_WORKERS")}}
-    LOGS.mkdir(parents=True, exist_ok=True)
-    _ = (LOGS / "check.log").write_text(json.dumps(metadata, indent=2) + "\n")
+    paths.logs.mkdir(parents=True, exist_ok=True)
+    _ = (paths.logs / "check.json").write_text(json.dumps(metadata, indent=2) + "\n")
     print(json.dumps(metadata, indent=2))
 
 
 def protocol(steps: list[str]) -> None:
-    """Run the original runner; complete stages resume using original semantics."""
-    stage()
-    run([sys.executable, "mover_run.py", *steps], RUNNER,
+    """Run protocol steps; completed steps resume from their outputs."""
+    run([sys.executable, "-m", "pipeline.protocol", *steps],
         "protocol-" + ("all" if not steps else "-".join(steps)))
 
 
@@ -112,31 +94,23 @@ def main() -> None:
     _ = os.environ.setdefault("PREOPXAI_WORKERS", "6")
     commands = {
         "check": check,
-        "prepare": lambda: run([sys.executable, "-m", "scripts.prepare"],
-                              ROOT, "prepare"),
+        "prepare": lambda: run([sys.executable, "-m", "pipeline.prepare"], "prepare"),
         "protocol": lambda: protocol(sys.argv[2:]),
-        "publication": lambda: run([sys.executable, "-m", "scripts.publication"],
-                                  ROOT, "publication"),
-        "verify": lambda: run([sys.executable, "-m", "scripts.verify"],
-                             ROOT, "verify"),
+        "report": lambda: run([sys.executable, "-m", "pipeline.reporting.stage", *sys.argv[2:]],
+                              "report"),
+        "verify": lambda: run([sys.executable, "-m", "pipeline.verify"], "verify"),
     }
     command = sys.argv[1] if len(sys.argv) > 1 else "help"
     if command == "all":
         check()
         commands["prepare"]()
         protocol([])
-        failures: list[str] = []
-        for name in ("publication", "verify"):
-            try:
-                commands[name]()
-            except subprocess.CalledProcessError:
-                failures.append(name)
-        if failures:
-            raise SystemExit("Failed stages (see captured logs): " + ", ".join(failures))
+        commands["report"]()
+        commands["verify"]()
     elif command in commands:
         commands[command]()
     else:
-        raise SystemExit("Usage: reproduce.py check|prepare|protocol [steps...]|publication|verify|all")
+        raise SystemExit("Usage: pipeline.cli check|prepare|protocol [steps...]|report [--promote]|verify|all")
 
 
 if __name__ == "__main__":

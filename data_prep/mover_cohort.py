@@ -1,4 +1,4 @@
-"""MOVER EPIC cohort + mortality labels: pandas port of preop_xai.cohort.build_cohort and labels.build_labels
+"""MOVER EPIC cohort + mortality labels: pandas port of preopxai.cohort.build_cohort and labels.build_labels
 (same rules), with the reviewed mappings stated explicitly below. Prints aggregate counts only."""
 import json, sys
 import numpy as np, pandas as pd

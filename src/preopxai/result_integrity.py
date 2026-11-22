@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TypedDict
 
-from preop_xai.result_io import Row, load_json, sha256
+from preopxai.result_io import Row, load_json, sha256
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 ARTIFACTS_ROOT = REPOSITORY_ROOT / "artifacts"
