@@ -52,8 +52,10 @@ class Engine:
         if missing:
             raise RuntimeError(f"Missing model artifacts for {missing}. Run `make export-models` first.")
         self._saved: dict[str, EndpointArtifacts] = {name: load_endpoint(directory / name) for name in ENDPOINTS}
-        self._margins = {name: TreeMargin(saved.bundles["xgboost"].pipeline.named_steps["model"])
-                         for name, saved in self._saved.items()}
+        self._margins = {
+            name: TreeMargin(saved.bundles["xgboost"].pipeline.named_steps["model"])
+            for name, saved in self._saved.items()
+        }
 
     def _explain(self, endpoint: str, model: str, frame: pd.DataFrame) -> ModelPrediction:
         saved = self._saved[endpoint]
@@ -71,15 +73,30 @@ class Engine:
         probability = float(probabilities(bundle, frame)[0])
         threshold = float(bundle.threshold)  # pyright: ignore[reportArgumentType]
         groups = np.asarray(data["groups"])
-        shap = [{"concept": concept, "label": LABELS[concept],
-                 "contribution": float(values[groups == concept].sum()),
-                 "value_part": float(values[(groups == concept) & ~data["missing"]].sum()),
-                 "missingness_part": float(values[(groups == concept) & data["missing"]].sum())}
-                for concept in FEATURES]
-        return ModelPrediction.model_validate({
-            "log_odds": log_odds, "native_margin": native, "base_value": base, "calibrated_log_odds": a + b * native,
-            "calibrated_probability": probability, "threshold": threshold, "above_threshold": probability >= threshold,
-            "recalibration_intercept": a, "recalibration_slope": b, "shap": shap})
+        shap = [
+            {
+                "concept": concept,
+                "label": LABELS[concept],
+                "contribution": float(values[groups == concept].sum()),
+                "value_part": float(values[(groups == concept) & ~data["missing"]].sum()),
+                "missingness_part": float(values[(groups == concept) & data["missing"]].sum()),
+            }
+            for concept in FEATURES
+        ]
+        return ModelPrediction.model_validate(
+            {
+                "log_odds": log_odds,
+                "native_margin": native,
+                "base_value": base,
+                "calibrated_log_odds": a + b * native,
+                "calibrated_probability": probability,
+                "threshold": threshold,
+                "above_threshold": probability >= threshold,
+                "recalibration_intercept": a,
+                "recalibration_slope": b,
+                "shap": shap,
+            }
+        )
 
     def predict(self, patient: PatientInput) -> PredictionResponse:
         """Return both models for both endpoints."""
@@ -87,7 +104,10 @@ class Engine:
         row["asa"] = str(row["asa"])
         frame = pd.DataFrame([{name: row[name] if row[name] is not None else np.nan for name in FEATURES}])
         frame = feature_matrix(frame)
-        result = {endpoint: EndpointPrediction(lr=self._explain(endpoint, "lr", frame),
-                                               xgboost=self._explain(endpoint, "xgboost", frame))
-                  for endpoint in ENDPOINTS}
+        result = {
+            endpoint: EndpointPrediction(
+                lr=self._explain(endpoint, "lr", frame), xgboost=self._explain(endpoint, "xgboost", frame)
+            )
+            for endpoint in ENDPOINTS
+        }
         return PredictionResponse(scale=SCALE, notice=NOTICE, mortality=result["mortality"], icu=result["icu"])

@@ -10,8 +10,18 @@ from pipeline.config import load_paths
 from pipeline.model_artifacts import ENDPOINTS, MODELS, artifacts_dir
 from preopxai.preprocessing import FEATURES, LABS
 
-BASE = {"age": 64, "sex": "F", "asa": 3, "hemoglobin": 12.1, "platelets": 210, "creatinine": 1.1, "bun": 18,
-        "sodium": 139, "potassium": 4.2, "glucose": 110}
+BASE = {
+    "age": 64,
+    "sex": "F",
+    "asa": 3,
+    "hemoglobin": 12.1,
+    "platelets": 210,
+    "creatinine": 1.1,
+    "bun": 18,
+    "sodium": 139,
+    "potassium": 4.2,
+    "glucose": 110,
+}
 
 
 def predictions(body):
@@ -22,8 +32,11 @@ def inputs(client):
     rng = np.random.default_rng(2026)
     cases = [patient["inputs"] for patient in client.get("/patients").json()["patients"]]
     for _ in range(25):
-        case = {"age": float(rng.uniform(*RANGES["age"])), "sex": str(rng.choice(["F", "M"])),
-                "asa": int(rng.integers(1, 6))}
+        case = {
+            "age": float(rng.uniform(*RANGES["age"])),
+            "sex": str(rng.choice(["F", "M"])),
+            "asa": int(rng.integers(1, 6)),
+        }
         for lab in LABS:
             case[lab] = None if rng.random() < 0.4 else float(rng.uniform(*RANGES[lab]))
         cases.append(case)
@@ -83,8 +96,21 @@ def test_range_limits(client, name):
     assert detail["field"] == name and "must be between" in detail["message"]
 
 
-@pytest.mark.parametrize("change", [{"asa": 6}, {"asa": 0}, {"asa": "3"}, {"asa": 2.5}, {"sex": "X"}, {"age": None},
-                                    {"age": "60"}, {"sodium": "high"}, {"glucose": True}, {"extra": 1}])
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"asa": 6},
+        {"asa": 0},
+        {"asa": "3"},
+        {"asa": 2.5},
+        {"sex": "X"},
+        {"age": None},
+        {"age": "60"},
+        {"sodium": "high"},
+        {"glucose": True},
+        {"extra": 1},
+    ],
+)
 def test_invalid_inputs_are_rejected(client, change):
     assert client.post("/predict", json={**BASE, **change}).status_code == 422
 
@@ -103,8 +129,10 @@ def test_patients_contain_no_background_rows(client):
     served = client.get("/patients").json()["patients"]
     for endpoint in ENDPOINTS:
         background = pd.read_csv(artifacts_dir() / endpoint / "background.csv", dtype={"sex": str, "asa": str})
-        rows = {tuple(None if pd.isna(value) else float(value) for value in row)
-                for row in background[["age", *LABS]].itertuples(index=False)}
+        rows = {
+            tuple(None if pd.isna(value) else float(value) for value in row)
+            for row in background[["age", *LABS]].itertuples(index=False)
+        }
         for patient in served:
             case = patient["inputs"]
             assert tuple(None if case[k] is None else float(case[k]) for k in ("age", *LABS)) not in rows

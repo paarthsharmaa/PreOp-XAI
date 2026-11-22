@@ -37,7 +37,7 @@ pythonpath = [".", "src"]
 [tool.ruff]
 target-version = "py313"
 line-length = 120
-include = ["pipeline/**/*.py", "tests/**/*.py"]
+include = ["app/**/*.py", "pipeline/**/*.py", "tests/**/*.py"]
 # Scientific modules keep their established formatting.
 exclude = [
   "pipeline/protocol.py",
@@ -52,7 +52,7 @@ select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.isort]
 force-sort-within-sections = true
-known-first-party = ["pipeline", "preopxai", "data_prep"]
+known-first-party = ["app", "pipeline", "preopxai", "data_prep"]
 
 [tool.basedpyright]
 include = ["pipeline", "tests"]

@@ -12,11 +12,28 @@ from pydantic_core import PydanticCustomError
 from pipeline.config import ROOT
 from preopxai.preprocessing import LABS
 
-UNITS: Final = {"age": "years", "hemoglobin": "g/dL", "platelets": "×10³/µL", "creatinine": "mg/dL", "bun": "mg/dL",
-                "sodium": "mmol/L", "potassium": "mmol/L", "glucose": "mg/dL"}
-LABELS: Final = {"age": "Age", "sex": "Sex", "asa": "ASA class", "hemoglobin": "Haemoglobin", "platelets": "Platelets",
-                 "creatinine": "Creatinine", "bun": "BUN", "sodium": "Sodium", "potassium": "Potassium",
-                 "glucose": "Glucose"}
+UNITS: Final = {
+    "age": "years",
+    "hemoglobin": "g/dL",
+    "platelets": "×10³/µL",
+    "creatinine": "mg/dL",
+    "bun": "mg/dL",
+    "sodium": "mmol/L",
+    "potassium": "mmol/L",
+    "glucose": "mg/dL",
+}
+LABELS: Final = {
+    "age": "Age",
+    "sex": "Sex",
+    "asa": "ASA class",
+    "hemoglobin": "Haemoglobin",
+    "platelets": "Platelets",
+    "creatinine": "Creatinine",
+    "bun": "BUN",
+    "sodium": "Sodium",
+    "potassium": "Potassium",
+    "glucose": "Glucose",
+}
 
 
 def _lab_ranges() -> dict[str, tuple[float, float]]:
@@ -70,9 +87,11 @@ class PatientInput(BaseModel):
         name = str(info.field_name)
         low, high = RANGES[name]
         if value is not None and not low <= value <= high:
-            raise PydanticCustomError("out_of_range", "{label} must be between {low} and {high} {unit}",
-                                      {"label": LABELS[name], "low": f"{low:g}", "high": f"{high:g}",
-                                       "unit": UNITS[name]})
+            raise PydanticCustomError(
+                "out_of_range",
+                "{label} must be between {low} and {high} {unit}",
+                {"label": LABELS[name], "low": f"{low:g}", "high": f"{high:g}", "unit": UNITS[name]},
+            )
         return value
 
 

@@ -35,7 +35,7 @@ test:
 	$(UV_RUN) pytest
 
 lint:
-	$(UV_RUN) ruff check pipeline tests
+	$(UV_RUN) ruff check app pipeline tests
 	$(UV_RUN) basedpyright
 
 all:

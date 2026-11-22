@@ -7,7 +7,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.api.engine import NOTICE, Engine
-from app.api.patients import ATTRIBUTION, NOTICE as PATIENT_NOTICE, PatientStore
+from app.api.patients import ATTRIBUTION, PatientStore
+from app.api.patients import NOTICE as PATIENT_NOTICE
 from app.api.schemas import (
     LABELS,
     RANGES,
@@ -23,8 +24,10 @@ from pipeline.config import load_paths
 async def _validation_error(_: Request, error: Exception) -> JSONResponse:
     """Return one clear message per field, without echoing the submitted values."""
     assert isinstance(error, RequestValidationError)
-    details = [{"field": ".".join(str(part) for part in item["loc"] if part != "body"), "message": item["msg"]}
-               for item in error.errors()]
+    details = [
+        {"field": ".".join(str(part) for part in item["loc"] if part != "body"), "message": item["msg"]}
+        for item in error.errors()
+    ]
     return JSONResponse(status_code=422, content={"detail": details})
 
 
@@ -41,8 +44,12 @@ def create_app() -> FastAPI:
 
     @app.get("/meta")
     def meta() -> dict[str, object]:
-        return {"notice": NOTICE, "labels": LABELS, "units": UNITS,
-                "ranges": {name: {"min": low, "max": high} for name, (low, high) in RANGES.items()}}
+        return {
+            "notice": NOTICE,
+            "labels": LABELS,
+            "units": UNITS,
+            "ranges": {name: {"min": low, "max": high} for name, (low, high) in RANGES.items()},
+        }
 
     @app.post("/predict")
     def predict(patient: PatientInput) -> PredictionResponse:
