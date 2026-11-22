@@ -84,6 +84,48 @@ A full run takes about 15 minutes on 16 cores with the default 6 workers. `make 
 `make all`, currently exits nonzero for the reason given in
 [Known limitations](docs/KNOWN_LIMITATIONS.md).
 
+## Dashboard
+
+A local web app presents the findings and explains individual predictions from both models.
+
+| Overview | Findings |
+| --- | --- |
+| ![Overview page](docs/screenshots/overview-desktop.png) | ![Findings page](docs/screenshots/findings-desktop.png) |
+
+| Patient explorer | What-if change |
+| --- | --- |
+| ![Patient explorer](docs/screenshots/explorer-desktop.png) | ![What-if change in the explorer](docs/screenshots/explorer-whatif-desktop.png) |
+
+| Methods | Team |
+| --- | --- |
+| ![Methods page](docs/screenshots/methods-desktop.png) | ![Team page](docs/screenshots/team-desktop.png) |
+
+```sh
+make export-models  # refit the primary split, save it to artifacts/ and verify it against results/
+make app            # build the site data and start the API and web app on 127.0.0.1
+make app-test       # API, SHAP additivity, determinism and traceability tests
+make app-e2e        # Playwright smoke tests
+make app-static     # build the findings-only static site
+```
+
+`make app` needs Node.js as well as uv. Open <http://127.0.0.1:5173>. `docker compose up --build` serves the same app
+on <http://127.0.0.1:8080>, with `artifacts/` and `data/vitaldb/` mounted read-only.
+
+- **Traceable numbers.** `app/build_data.py` generates all site data from `results/` and `verification/`, and a test
+  recomputes every displayed number from its source.
+- **Patient data.** MOVER rows and the SHAP background stay in the gitignored `artifacts/` folder and are used only by
+  the local API. Example patients are public VitalDB records or labelled synthetic profiles.
+- **Do not deploy the API publicly.** Its artifacts derive from MOVER patient data.
+- **Publishing the findings site.** The GitHub Pages workflow runs only when triggered manually. Check first that your
+  MOVER data usage agreement permits publishing these aggregates, including calibration deciles that imply small event
+  counts.
+- **XGBoost log-odds.** XGBoost accumulates margins in float32. The API reports the float64 sum of the same leaves so
+  that SHAP values add up exactly, and it computes probabilities from the native margin, as the study did.
+
+VitalDB is used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Cite Lee HC et al., *Sci Data* 2022;9:279,
+[doi:10.1038/s41597-022-01411-5](https://doi.org/10.1038/s41597-022-01411-5). Records were sampled, identifiers removed,
+ages above 89 top-coded to 90 and fields renamed.
+
 ## Data
 
 MOVER and VitalDB are not distributed here. Obtain them under their own terms and place them as
@@ -96,6 +138,7 @@ are committed, with calibration cells under 11 patients removed, and a test enfo
 ## Repository layout
 
 ```text
+app/             dashboard: data build, local API and web frontend
 src/preopxai/    core modelling, calibration, evaluation, SHAP and stability
 data_prep/       MOVER cohort, lab extraction, feature tables, VitalDB adapter
 pipeline/        CLI, configuration, protocol, reporting, verification
