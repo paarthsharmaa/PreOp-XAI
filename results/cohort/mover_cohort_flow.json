@@ -1,0 +1,21 @@
+{
+ "rows": 65728,
+ "patients": 39685,
+ "operations": 64354,
+ "exact_duplicates_removed": 1367,
+ "exclusions": {
+  "operation_conflict": 14,
+  "not_adult": 34,
+  "invalid_or_donor_asa": 41,
+  "invalid_anesthesia_boundary": 7317,
+  "ambiguous_first_operation_time": 0,
+  "later_eligible_operation": 18761
+ },
+ "indexed_patients": 38194,
+ "unlinked": 51,
+ "unknown_disposition": 947,
+ "mortality_known": 37196,
+ "mortality_events": 314,
+ "icu_flag_yes_among_known": 13646,
+ "asa_missing": 9
+}

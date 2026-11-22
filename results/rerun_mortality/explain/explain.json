@@ -1,0 +1,270 @@
+{
+ "seed": 2026,
+ "n_explained": 5579,
+ "background_n": 64,
+ "shap_version": "exact-in-house-1.0 (shap API subset)",
+ "dependence_assumption": "interventional",
+ "scale": "log-odds; not additive probability effects",
+ "models": {
+  "lr": {
+   "raw_additivity": true,
+   "calibrated_logit_additivity": true,
+   "calibration": {
+    "intercept": -0.057454788918537725,
+    "slope": 1.010860857400165,
+    "fitted": true,
+    "status": "fitted",
+    "use": "research-only"
+   },
+   "clinical_features": [
+    "age",
+    "sex",
+    "asa",
+    "hemoglobin",
+    "platelets",
+    "creatinine",
+    "bun",
+    "sodium",
+    "potassium",
+    "glucose"
+   ],
+   "global_mean_absolute_raw": {
+    "age": 0.15786425203737484,
+    "sex": 0.14482332225410122,
+    "asa": 1.1961715518598923,
+    "hemoglobin": 0.07327219309252916,
+    "platelets": 0.0831919342402027,
+    "creatinine": 0.03542347983682544,
+    "bun": 0.025721827986495617,
+    "sodium": 0.012707801387676245,
+    "potassium": 0.0031543054139971253,
+    "glucose": 0.03552823366027596
+   },
+   "global_mean_absolute_calibrated": {
+    "age": 0.1595787931673367,
+    "sex": 0.14639622770530897,
+    "asa": 1.20916300051072,
+    "hemoglobin": 0.07406799193309324,
+    "platelets": 0.08409546997483044,
+    "creatinine": 0.035808209199955636,
+    "bun": 0.026001189092328743,
+    "sodium": 0.012845819006417875,
+    "potassium": 0.0031885638752948745,
+    "glucose": 0.03591410073974433
+   },
+   "missingness_mean_absolute_raw": {
+    "age": 0.0,
+    "sex": 0.0,
+    "asa": 0.0,
+    "hemoglobin": 0.025623189798118,
+    "platelets": 0.036885660168868115,
+    "creatinine": 0.01008070064263087,
+    "bun": 0.005007251165937885,
+    "sodium": 0.000353988341090433,
+    "potassium": 0.0017581960979017614,
+    "glucose": 0.0007437643470979032
+   },
+   "transformed_mean_absolute_raw": {
+    "numeric__age": 0.15786425203737484,
+    "numeric__hemoglobin": 0.06087243619699215,
+    "numeric__platelets": 0.06516761795846727,
+    "numeric__creatinine": 0.031496159797928316,
+    "numeric__bun": 0.027098901012077743,
+    "numeric__sodium": 0.012844847858484741,
+    "numeric__potassium": 0.0022354716465981723,
+    "numeric__glucose": 0.03523160461804491,
+    "categorical__sex_F": 0.6700875112126036,
+    "categorical__sex_M": 0.5252641889585254,
+    "categorical__asa_1": 0.22181808304709624,
+    "categorical__asa_2": 1.662099262483743,
+    "categorical__asa_3": 0.615948721888926,
+    "categorical__asa_4": 0.1182530136558752,
+    "categorical__asa_5": 0.03602521364087427,
+    "categorical__asa_unknown": 1.1080829402676197e-05,
+    "missing__missingindicator_hemoglobin": 0.025623189798118,
+    "missing__missingindicator_platelets": 0.036885660168868115,
+    "missing__missingindicator_creatinine": 0.01008070064263087,
+    "missing__missingindicator_bun": 0.005007251165937885,
+    "missing__missingindicator_sodium": 0.000353988341090433,
+    "missing__missingindicator_potassium": 0.0017581960979017614,
+    "missing__missingindicator_glucose": 0.0007437643470979032
+   },
+   "baseline_raw_mean": -6.258741153000115,
+   "baseline_calibrated_mean": -6.384171237085928,
+   "local_groups": {
+    "TP": {
+     "n": 38,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/lr_local_TP.png"
+    },
+    "FP": {
+     "n": 498,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/lr_local_FP.png"
+    },
+    "TN": {
+     "n": 5034,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/lr_local_TN.png"
+    },
+    "FN": {
+     "n": 9,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/lr_local_FN.png"
+    }
+   },
+   "dependence_lookup": {}
+  },
+  "xgboost": {
+   "raw_additivity": true,
+   "calibrated_logit_additivity": true,
+   "calibration": {
+    "intercept": -0.05768589801651493,
+    "slope": 1.0106981012908494,
+    "fitted": true,
+    "status": "fitted",
+    "use": "research-only"
+   },
+   "clinical_features": [
+    "age",
+    "sex",
+    "asa",
+    "hemoglobin",
+    "platelets",
+    "creatinine",
+    "bun",
+    "sodium",
+    "potassium",
+    "glucose"
+   ],
+   "global_mean_absolute_raw": {
+    "age": 0.09214071679236423,
+    "sex": 0.1367868583538271,
+    "asa": 1.028379768409995,
+    "hemoglobin": 0.08093270741191239,
+    "platelets": 0.059743230969800346,
+    "creatinine": 0.019847206176838113,
+    "bun": 0.044084982780271065,
+    "sodium": 0.019405764149192567,
+    "potassium": 0.009573699513709774,
+    "glucose": 0.03235027406228629
+   },
+   "global_mean_absolute_calibrated": {
+    "age": 0.0931264475136187,
+    "sex": 0.13825021801975687,
+    "asa": 1.0393814793378842,
+    "hemoglobin": 0.08179853371354655,
+    "platelets": 0.06038237010615706,
+    "creatinine": 0.020059533598858308,
+    "bun": 0.04455660839146065,
+    "sodium": 0.019613368979687396,
+    "potassium": 0.009676119920835663,
+    "glucose": 0.03269636057099136
+   },
+   "missingness_mean_absolute_raw": {
+    "age": 0.0,
+    "sex": 0.0,
+    "asa": 0.0,
+    "hemoglobin": 0.00019475245199162053,
+    "platelets": 0.0,
+    "creatinine": 0.0,
+    "bun": 0.0,
+    "sodium": 0.0,
+    "potassium": 0.0,
+    "glucose": 0.0
+   },
+   "transformed_mean_absolute_raw": {
+    "numeric__age": 0.09214071679236423,
+    "numeric__hemoglobin": 0.08091911785995123,
+    "numeric__platelets": 0.059743230969800346,
+    "numeric__creatinine": 0.019847206176838113,
+    "numeric__bun": 0.044084982780271065,
+    "numeric__sodium": 0.019405764149192567,
+    "numeric__potassium": 0.009573699513709774,
+    "numeric__glucose": 0.03235027406228629,
+    "categorical__sex_F": 0.1367868583538271,
+    "categorical__sex_M": 0.0,
+    "categorical__asa_1": 0.08384837236727656,
+    "categorical__asa_2": 1.1015518902000319,
+    "categorical__asa_3": 0.25428921850138986,
+    "categorical__asa_4": 0.19388068377332252,
+    "categorical__asa_5": 0.04074526401751607,
+    "categorical__asa_unknown": 0.0,
+    "missing__missingindicator_hemoglobin": 0.00019475245199162053,
+    "missing__missingindicator_platelets": 0.0,
+    "missing__missingindicator_creatinine": 0.0,
+    "missing__missingindicator_bun": 0.0,
+    "missing__missingindicator_sodium": 0.0,
+    "missing__missingindicator_potassium": 0.0,
+    "missing__missingindicator_glucose": 0.0
+   },
+   "baseline_raw_mean": -6.215593755245209,
+   "baseline_calibrated_mean": -6.339774704838107,
+   "local_groups": {
+    "TP": {
+     "n": 38,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/xgboost_local_TP.png"
+    },
+    "FP": {
+     "n": 560,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/xgboost_local_FP.png"
+    },
+    "TN": {
+     "n": 4972,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/xgboost_local_TN.png"
+    },
+    "FN": {
+     "n": 9,
+     "status": "selected",
+     "selection_rule": "nearest within-group median calibrated risk; first row breaks ties",
+     "figure": "private/xgboost_local_FN.png"
+    }
+   },
+   "dependence_lookup": {
+    "age": {
+     "status": "available",
+     "transformed_feature": "numeric__age",
+     "rule": "first non-missingness transformed column in schema order"
+    },
+    "creatinine": {
+     "status": "available",
+     "transformed_feature": "numeric__creatinine",
+     "rule": "first non-missingness transformed column in schema order"
+    },
+    "hemoglobin": {
+     "status": "available",
+     "transformed_feature": "numeric__hemoglobin",
+     "rule": "first non-missingness transformed column in schema order"
+    }
+   }
+  }
+ },
+ "figures": [
+  "figures/lr_global.png",
+  "figures/xgboost_global.png",
+  "figures/xgboost_beeswarm.png",
+  "figures/xgboost_dependence_age.png",
+  "figures/xgboost_dependence_creatinine.png",
+  "figures/xgboost_dependence_hemoglobin.png"
+ ],
+ "private_figures": [
+  "private/lr_local_TP.png",
+  "private/lr_local_FP.png",
+  "private/lr_local_TN.png",
+  "private/lr_local_FN.png",
+  "private/xgboost_local_TP.png",
+  "private/xgboost_local_FP.png",
+  "private/xgboost_local_TN.png",
+  "private/xgboost_local_FN.png"
+ ]
+}

@@ -1,0 +1,111 @@
+{
+ "seed": 62,
+ "partition_events": {
+  "train": 220,
+  "validation": 47,
+  "test": 47
+ },
+ "selection": {
+  "lr": {
+   "parameters": {
+    "C": 10.0
+   },
+   "cv_average_precision": 0.25043263165617663,
+   "threshold": 0.005421656395265402,
+   "calibration_status": "fitted",
+   "calibration_slope": 0.8594600245629894,
+   "calibration_intercept": -0.45942002345509686
+  },
+  "xgboost": {
+   "parameters": {
+    "max_depth": 2,
+    "n_estimators": 200,
+    "learning_rate": 0.1,
+    "min_child_weight": 5,
+    "reg_lambda": 5.0
+   },
+   "cv_average_precision": 0.23761154453454644,
+   "threshold": 0.004721268660202483,
+   "calibration_status": "fitted",
+   "calibration_slope": 0.9093091147449229,
+   "calibration_intercept": -0.22810124441861
+  }
+ },
+ "test": {
+  "lr": {
+   "raw": {
+    "auroc": 0.9189293638555514,
+    "average_precision": 0.2203506643749116,
+    "brier": 0.007394984926235684
+   },
+   "calibrated": {
+    "auroc": 0.9189293638555514,
+    "average_precision": 0.2203506643749116,
+    "brier": 0.0073055962443126145
+   },
+   "raw_calibration": {
+    "offset_intercept": -0.1084348755642185,
+    "joint_intercept": -0.39876621008904284,
+    "joint_slope": 0.9026170414351589,
+    "converged": true,
+    "status": "estimated"
+   },
+   "calibration": {
+    "offset_intercept": -0.0769981863493296,
+    "joint_intercept": 0.08372318060885703,
+    "joint_slope": 1.050214106284786,
+    "converged": true,
+    "status": "estimated"
+   },
+   "tp": 42,
+   "fp": 1296,
+   "tn": 4237,
+   "fn": 5,
+   "sensitivity": 0.8936170212765957,
+   "specificity": 0.7657690222302548,
+   "ppv": 0.03139013452914798,
+   "npv": 0.9988213107024988,
+   "training_prevalence_brier": 0.008351993871790564,
+   "calibration_status": "fitted"
+  },
+  "xgboost": {
+   "raw": {
+    "auroc": 0.9219672295049817,
+    "average_precision": 0.25045742059624926,
+    "brier": 0.007070119438444448
+   },
+   "calibrated": {
+    "auroc": 0.9219672295049817,
+    "average_precision": 0.25045742059624926,
+    "brier": 0.007080060063639702
+   },
+   "raw_calibration": {
+    "offset_intercept": -0.01814212095122944,
+    "joint_intercept": -0.013075221224766518,
+    "joint_slope": 1.0016527528898278,
+    "converged": true,
+    "status": "estimated"
+   },
+   "calibration": {
+    "offset_intercept": -0.08020121837644036,
+    "joint_intercept": 0.23819053517828695,
+    "joint_slope": 1.101553626368759,
+    "converged": true,
+    "status": "estimated"
+   },
+   "tp": 41,
+   "fp": 1209,
+   "tn": 4324,
+   "fn": 6,
+   "sensitivity": 0.8723404255319149,
+   "specificity": 0.7814928610157238,
+   "ppv": 0.0328,
+   "npv": 0.9986143187066975,
+   "training_prevalence_brier": 0.008351993871790564,
+   "calibration_status": "fitted"
+  }
+ },
+ "test_n": 5580,
+ "test_events": 47,
+ "runtime_s": 137.5
+}
