@@ -300,16 +300,13 @@ def repeats_block(src: Sources, endpoint: str) -> dict[str, Any]:
     summary = "results/summary.json"
     splits = src.v(summary, f"{endpoint}/splits")
     low, high = src.lookup(f"{summary}#{endpoint}/seeds")
-    points = [
-        {
-            "seed": src.v(f"results/repeats_{endpoint}/seed{seed:03d}.json", "seed"),
-            **{
-                model: src.v(f"results/repeats_{endpoint}/seed{seed:03d}.json", f"test/{model}/raw/auroc")
-                for model in MODELS
-            },
-        }
-        for seed in range(low, high + 1)
-    ]
+    points = []
+    for seed in range(low, high + 1):
+        file = f"results/repeats_{endpoint}/seed{seed:03d}.json"
+        scores = {model: src.v(file, f"test/{model}/raw/auroc") for model in MODELS}
+        points.append(
+            {"seed": src.v(file, "seed"), **scores, "difference": derive("diff", scores["xgboost"], scores["lr"])}
+        )
     diff = {
         key: src.v(summary, f"{endpoint}/diff_auroc/{key}") for key in ("median", "p2_5", "p97_5", "share_xgb_better")
     }
@@ -372,7 +369,7 @@ def _interval_verdict(low: float, high: float) -> str:
 
 
 def takeaways(entry: dict[str, Any]) -> dict[str, Note]:
-    test, ext, shap, rep, lag0 = entry["test"], entry["external"], entry["shap"], entry["repeats"], entry["lag0"]
+    test, shap, rep, lag0 = entry["test"], entry["shap"], entry["repeats"], entry["lag0"]
     lr, xgb = test["models"]["lr"], test["models"]["xgboost"]
     diff = test["auroc_difference"]
     rep_diff = rep["difference"]
