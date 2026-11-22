@@ -36,7 +36,7 @@ def differences(expected: JSON, actual: JSON, path: str = "") -> list[str]:
         case list() as left, list() as right:
             if len(left) != len(right):
                 return [path + " length mismatch"]
-            return [item for index, (a, b) in enumerate(zip(left, right))
+            return [item for index, (a, b) in enumerate(zip(left, right, strict=True))
                     for item in differences(a, b, f"{path}[{index}]")]
         case int() | float(), int() | float():
             close = math.isclose(expected, actual, rel_tol=RELATIVE_TOLERANCE,

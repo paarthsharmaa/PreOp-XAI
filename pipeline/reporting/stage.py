@@ -3,13 +3,14 @@
 Run: uv run --locked python -m pipeline.cli report [--promote]
 """
 
+from collections.abc import Callable
 import os
 from pathlib import Path
 import runpy
 import shutil
 import subprocess
 import sys
-from typing import IO, Callable
+from typing import IO
 
 import matplotlib.figure
 from pydantic import JsonValue, TypeAdapter
@@ -48,7 +49,7 @@ def main() -> None:
     _ = subprocess.run([sys.executable, str(HERE / "summarize.py")], cwd=output, check=True)
     # Capture the same live Figure as PNG plus PDF and SVG vectors.
     save_adapter: TypeAdapter[Callable[..., None]] = TypeAdapter(Callable[..., None])
-    original_save = save_adapter.validate_python(getattr(matplotlib.figure.Figure, "savefig"))
+    original_save = save_adapter.validate_python(matplotlib.figure.Figure.savefig)
 
     def save_vectors(self: matplotlib.figure.Figure, fname: str | os.PathLike[str] | IO[bytes],
                      *, transparent: bool | None = None, **kwargs: JsonValue) -> None:

@@ -43,7 +43,7 @@ def main() -> None:
                 boundaries.append(offset + 1 if stream.read(1) == b"\n" else offset)
         boundaries.append(size)
         chunks: list[Path] = []
-        for index, (start, end) in enumerate(zip(boundaries, boundaries[1:])):
+        for index, (start, end) in enumerate(zip(boundaries, boundaries[1:], strict=False)):
             chunk = work / f"chunk-{index:03d}.pkl"
             _ = subprocess.run([sys.executable, str(scripts / "lab_extract.py"), str(lab),
                                 str(start), str(end), str(chunk), str(work / "cohort.pkl")],
