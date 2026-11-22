@@ -81,7 +81,7 @@ def test_site_has_no_operating_point_counts(built):
 
 
 def published_files() -> list[Path]:
-    roots = [WEB / "public/data", WEB / "dist"]
+    roots = [WEB / "public/data", WEB / "dist", WEB / "dist-static"]
     return [path for root in roots if root.is_dir() for path in root.rglob("*") if path.is_file()]
 
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { DriverTable, InputPanel, RiskGauge, Waterfall } from "../components/explorer";
 import { Callout, EndpointToggle, PageHeader } from "../components/ui";
 import { getMeta, getOutcome, getPatients, InputError, predict, STATIC_SITE } from "../lib/api";
-import { plainLanguage } from "../lib/explain";
+import { outcomeName, plainLanguage } from "../lib/explain";
 import { fixed, signed } from "../lib/format";
 import { useSite } from "../lib/site";
 import {
@@ -55,12 +55,17 @@ function VitalDbCaveat({ endpoint }: { endpoint: EndpointKey }) {
   const site = useSite();
   const data = site.endpoints[endpoint];
   const { lr, xgboost } = data.transport;
+  const direction = (citl: number) => (citl > 0 ? "underestimated" : "overestimated");
+  const bias =
+    Math.sign(lr.citl) === Math.sign(xgboost.citl)
+      ? `On average, both models ${direction(lr.citl)} this risk at VitalDB.`
+      : `On average, LR ${direction(lr.citl)} and XGBoost ${direction(xgboost.citl)} this risk at VitalDB.`;
   return (
     <Callout title="VitalDB patient.">
       These models were developed on MOVER and are miscalibrated at VitalDB, so read this risk with caution. For{" "}
-      {data.label.toLowerCase()}, the VitalDB calibration slope was {fixed(lr.slope, 2)} (LR) and {fixed(xgboost.slope, 2)}{" "}
+      {outcomeName(data.label)}, the VitalDB calibration slope was {fixed(lr.slope, 2)} (LR) and {fixed(xgboost.slope, 2)}{" "}
       (XGBoost), where the ideal is one. Calibration-in-the-large was {signed(lr.citl, 2)} and {signed(xgboost.citl, 2)}, and
-      AUROC fell by {fixed(lr.drop)} and {fixed(xgboost.drop)}.
+      AUROC fell by {fixed(lr.drop)} and {fixed(xgboost.drop)}. {bias}
     </Callout>
   );
 }
@@ -220,7 +225,7 @@ function LiveExplorer() {
         <div className="min-w-0 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <EndpointToggle value={endpoint} onChange={setEndpoint} />
-            {edited && <span className="text-xs font-medium text-accent-dark">What-if mode: showing changes from the selected patient</span>}
+            {edited && <span className="max-w-md text-xs font-medium text-accent-dark">What-if mode: this shows how the model output changes, not what would happen to the patient.</span>}
           </div>
 
           {patient.source === "vitaldb" && <VitalDbCaveat endpoint={endpoint} />}

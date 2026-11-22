@@ -4,6 +4,8 @@ import type { Contribution, EndpointData, ModelKey, ModelPrediction, PatientInpu
 const TOP = 3;
 export const LABS = ["hemoglobin", "platelets", "creatinine", "bun", "sodium", "potassium", "glucose"] as const;
 
+export const outcomeName = (label: string) => label.replace(/^In-hospital/, "in-hospital");
+
 export const byImpact = (shap: Contribution[]) =>
   [...shap].sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution) || a.concept.localeCompare(b.concept));
 
@@ -56,7 +58,7 @@ export function plainLanguage(
   inputs: PatientInputs,
   endpoint: EndpointData,
 ): string[] {
-  const outcome = endpoint.label.toLowerCase();
+  const outcome = outcomeName(endpoint.label);
   const level = (model: ModelPrediction) => (model.above_threshold ? "above" : "below");
   const position =
     lr.above_threshold === xgb.above_threshold
