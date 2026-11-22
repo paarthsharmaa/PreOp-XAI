@@ -1,6 +1,6 @@
 """PreOp-XAI command line.
 
-Run: uv run --locked python -m pipeline.cli check|prepare|protocol [steps...]|report|verify|all
+Run: uv run --locked python -m pipeline.cli check|prepare|protocol [steps...]|report|verify|export-models|all
 """
 
 from __future__ import annotations
@@ -99,6 +99,7 @@ def main() -> None:
         "report": lambda: run([sys.executable, "-m", "pipeline.reporting.stage", *sys.argv[2:]],
                               "report"),
         "verify": lambda: run([sys.executable, "-m", "pipeline.verify"], "verify"),
+        "export-models": lambda: run([sys.executable, "-m", "pipeline.export_models"], "export-models"),
     }
     command = sys.argv[1] if len(sys.argv) > 1 else "help"
     if command == "all":
@@ -110,7 +111,8 @@ def main() -> None:
     elif command in commands:
         commands[command]()
     else:
-        raise SystemExit("Usage: pipeline.cli check|prepare|protocol [steps...]|report [--promote]|verify|all")
+        raise SystemExit("Usage: pipeline.cli check|prepare|protocol [steps...]|report [--promote]|verify|"
+                         "export-models|all")
 
 
 if __name__ == "__main__":
