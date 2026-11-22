@@ -1,14 +1,27 @@
-data
-MOVER
-PreOp_XAI_MOVER_code_and_verification
-docs
+# Patient-level data and run outputs stay local. Only data/README.md is tracked.
+/data/*
+!/data/README.md
+/outputs/
 
-# Runtime and patient-level outputs stay local.
+# Earlier local working copy with patient-level tables and runs.
+/MOVER/
+
+# Patient-level artifact types, wherever they appear.
+*.pkl
+*.pickle
+*.npz
+*.npy
+mover_analysis*.csv
+predictions*.csv
+
+# Local configuration.
+/config/paths.toml
+
+# Python and tooling.
 .venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
-outputs/
 core
 core.*
