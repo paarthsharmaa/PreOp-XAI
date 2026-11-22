@@ -1,0 +1,17 @@
+# Deny by default so that patient data, outputs and artifacts can never enter an image.
+*
+!.python-version
+!pyproject.toml
+!uv.lock
+!app
+!config
+!data_prep
+!pipeline
+!results
+!src
+!verification
+app/web/node_modules
+app/web/dist
+app/web/dist-static
+app/web/public/data
+**/__pycache__
