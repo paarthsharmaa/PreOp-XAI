@@ -45,20 +45,32 @@ export function EndpointToggle({ value, onChange }: { value: EndpointKey; onChan
   );
 }
 
-export function ModelKeyLegend() {
+export function ModelKeyLegend({ markers = false }: { markers?: boolean }) {
   const site = useSite();
   return (
     <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted">
       <span className="inline-flex items-center gap-2">
-        <svg width="24" height="8" aria-hidden="true">
-          <line x1="0" x2="24" y1="4" y2="4" stroke="var(--color-neutral-series)" strokeWidth="2" strokeDasharray="5 3" />
-        </svg>
+        {markers ? (
+          <svg width="12" height="12" aria-hidden="true">
+            <circle cx="6" cy="6" r="4.5" fill="#ffffff" stroke="var(--color-neutral-series)" strokeWidth="2" />
+          </svg>
+        ) : (
+          <svg width="24" height="8" aria-hidden="true">
+            <line x1="0" x2="24" y1="4" y2="4" stroke="var(--color-neutral-series)" strokeWidth="2" strokeDasharray="5 3" />
+          </svg>
+        )}
         {site.labels.models.lr}
       </span>
       <span className="inline-flex items-center gap-2">
-        <svg width="24" height="8" aria-hidden="true">
-          <line x1="0" x2="24" y1="4" y2="4" stroke="var(--color-accent)" strokeWidth="2" />
-        </svg>
+        {markers ? (
+          <svg width="12" height="12" aria-hidden="true">
+            <circle cx="6" cy="6" r="5" fill="var(--color-accent)" />
+          </svg>
+        ) : (
+          <svg width="24" height="8" aria-hidden="true">
+            <line x1="0" x2="24" y1="4" y2="4" stroke="var(--color-accent)" strokeWidth="2" />
+          </svg>
+        )}
         {site.labels.models.xgboost}
       </span>
     </div>
@@ -72,6 +84,7 @@ export function Figure({
   children,
   table,
   legend = true,
+  markers = false,
 }: {
   id?: string;
   title: string;
@@ -79,6 +92,7 @@ export function Figure({
   children: ReactNode;
   table?: { columns: string[]; rows: (string | number)[][] };
   legend?: boolean;
+  markers?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const tableId = useId();
@@ -88,7 +102,7 @@ export function Figure({
       {takeaway && <p className="mt-1.5 text-sm leading-relaxed text-body">{takeaway}</p>}
       {legend && (
         <div className="mt-3">
-          <ModelKeyLegend />
+          <ModelKeyLegend markers={markers} />
         </div>
       )}
       <div className="mt-3 min-w-0">{children}</div>

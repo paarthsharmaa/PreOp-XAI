@@ -20,7 +20,8 @@ function factorName(row: Contribution, inputs: PatientInputs): string {
   if (row.concept === "age") return `age ${inputs.age.toFixed(0)}`;
   if (row.concept === "sex") return inputs.sex === "F" ? "female sex" : "male sex";
   const value = inputs[row.concept as keyof PatientInputs];
-  return value === null ? `missing ${row.label.toLowerCase()}` : `${row.label.toLowerCase()} of ${value}`;
+  const name = row.concept === "bun" ? row.label : row.label.toLowerCase();
+  return value === null ? `missing ${name}` : `${name} of ${value}`;
 }
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);

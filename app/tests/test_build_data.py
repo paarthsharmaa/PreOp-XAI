@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+import re
 from typing import Any
 
 import pandas as pd
@@ -114,3 +115,17 @@ def test_no_mover_background_row_in_web_output():
             # Rows without labs hold one number, which cannot identify a row in aggregate output.
             if len(values) >= 3:
                 assert not any(values <= group for group in groups)
+
+
+def test_frontend_has_no_typed_numbers_in_visible_text():
+    sources = sorted((WEB / "src").rglob("*.tsx"))
+    assert sources
+    pattern = re.compile(r">\s*([^<>{}=;()&|?]*\d[^<>{}=;()&|?]*?)\s*<")
+    attribute = re.compile(r"\b(?:title|takeaway|note|eyebrow)=\"([^\"]*\d[^\"]*)\"")
+    found = []
+    for path in sources:
+        text = path.read_text()
+        for match in [*pattern.finditer(text), *attribute.finditer(text)]:
+            if match.group(1).replace("Lag-0", "").strip() and re.search(r"\d", match.group(1).replace("Lag-0", "")):
+                found.append(f"{path.name}: {match.group(1).strip()}")
+    assert found == []

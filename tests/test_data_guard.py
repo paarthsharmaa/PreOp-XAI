@@ -22,6 +22,8 @@ def violations(files: list[PurePosixPath]) -> list[str]:
             found.append(f"{path}: file under data/")
         if path.parts[0] == "outputs":
             found.append(f"{path}: run output")
+        if path.parts[0] == "artifacts":
+            found.append(f"{path}: fitted model artifact")
         if path.suffix.lower() in FORBIDDEN_SUFFIXES:
             found.append(f"{path}: patient-level artifact type")
         if path.suffix.lower() == ".csv" and (path.parts[0] != "results" or path.name not in AGGREGATE_CSV_NAMES):
@@ -35,6 +37,7 @@ def test_no_patient_level_files_are_tracked() -> None:
 
 def test_guard_detects_violations() -> None:
     bad = [PurePosixPath(name) for name in ("data/vitaldb/vitaldb_cases.csv", "results/mover_analysis.csv",
-                                            "src/model.pkl", "outputs/runs/x.json")]
+                                            "src/model.pkl", "outputs/runs/x.json",
+                                            "artifacts/icu/background.csv", "artifacts/icu/xgboost.json")]
     assert all(violations([path]) for path in bad)
     assert violations([PurePosixPath("data/README.md"), PurePosixPath("results/main_icu/intervals.csv")]) == []

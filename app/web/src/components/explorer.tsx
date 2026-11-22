@@ -37,10 +37,10 @@ export function RiskGauge({
         </p>
       )}
       <div className="relative mt-7 h-2 rounded-full bg-accent-soft" role="img" aria-label={`Calibrated risk ${risk(prediction.calibrated_probability)}, threshold ${risk(prediction.threshold)}, cohort rate ${risk(baseRate)}`}>
-        <span className="absolute -top-1.5 h-5 w-0.5 bg-ink" style={{ left: `${gaugePosition(prediction.threshold)}%` }} />
-        <span className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 border-2 border-muted bg-white" style={{ left: `${gaugePosition(baseRate)}%` }} />
+        <span className="absolute -top-3.5 h-2.5 w-2.5 -translate-x-1/2 rotate-45 border-2 border-muted bg-white" style={{ left: `${gaugePosition(baseRate)}%` }} />
         {changed && <span className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent bg-white" style={{ left: `${gaugePosition(reference.calibrated_probability)}%` }} />}
         <span className="animate-bar absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-accent shadow" style={{ left: `${gaugePosition(prediction.calibrated_probability)}%` }} />
+        <span className="absolute -top-1.5 z-10 h-5 w-0.5 -translate-x-1/2 bg-ink" style={{ left: `${gaugePosition(prediction.threshold)}%` }} />
       </div>
       <div className="numeric relative mt-1.5 h-4 text-[10px] text-muted" aria-hidden="true">
         {GAUGE_TICKS.map((tick) => (

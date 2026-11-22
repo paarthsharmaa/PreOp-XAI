@@ -53,7 +53,7 @@ SOURCES: Final = {
         "90, fields renamed and results aggregated. Example records in the local demo are a sample.",
     },
 }
-CURVE_POINTS: Final = 120
+CURVE_TOLERANCE: Final = 0.004
 SMALL_CELL: Final = 11
 
 
@@ -198,12 +198,26 @@ def _parse_selftest(text: str) -> dict[str, Any]:
     }
 
 
-def thin(length: int) -> list[int]:
-    """Evenly spaced indices that always keep both curve ends."""
-    if length <= CURVE_POINTS:
-        return list(range(length))
-    step = (length - 1) / (CURVE_POINTS - 1)
-    return sorted({round(i * step) for i in range(CURVE_POINTS)})
+def simplify(x: list[float], y: list[float]) -> list[int]:
+    """Ramer-Douglas-Peucker: keep only real curve points, within CURVE_TOLERANCE of the full curve."""
+    keep = {0, len(x) - 1}
+    stack = [(0, len(x) - 1)]
+    while stack:
+        first, last = stack.pop()
+        if last - first < 2:
+            continue
+        dx, dy = x[last] - x[first], y[last] - y[first]
+        norm = (dx * dx + dy * dy) ** 0.5
+        worst, index = -1.0, first
+        for i in range(first + 1, last):
+            px, py = x[i] - x[first], y[i] - y[first]
+            distance = abs(dx * py - dy * px) / norm if norm else (px * px + py * py) ** 0.5
+            if distance > worst:
+                worst, index = distance, i
+        if worst > CURVE_TOLERANCE:
+            keep.add(index)
+            stack.extend([(first, index), (index, last)])
+    return sorted(keep)
 
 
 def metric(src: Sources, metrics: str, intervals: str, model: str, group: str, name: str) -> dict[str, V]:
@@ -220,7 +234,9 @@ def model_block(src: Sources, run: str, sub: str, figure: str, model: str) -> di
     study = f"{run}/study.json"
     base = f"figure_data/{figure}/{model}"
     curves = src.lookup(f"{study}#{base}/curves")
-    roc, pr = thin(len(curves["fpr"])), thin(len(curves["recall"]))
+    roc = simplify(curves["fpr"], curves["tpr"])
+    # scikit-learn appends a sentinel (recall 0, precision 1) that is not an observed operating point.
+    pr = simplify(curves["recall"][:-1], curves["precision"][:-1])
     deciles = src.lookup(f"{study}#{base}/deciles_cal")
     return {
         "auroc": metric(src, metrics, intervals, model, "raw", "auroc"),

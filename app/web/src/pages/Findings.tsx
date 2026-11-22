@@ -110,6 +110,7 @@ export default function Findings() {
         <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
           <Figure
             title="Calibration by risk decile (test set)"
+            markers
             takeaway={takeaways.calibration}
             table={{
               columns: ["Decile", "LR predicted", "LR observed", "XGBoost predicted", "XGBoost observed"],
@@ -224,7 +225,7 @@ export default function Findings() {
               </tbody>
             </table>
           </Figure>
-          <Figure title="Calibration at VitalDB"
+          <Figure title="Calibration at VitalDB" markers
             takeaway={`Frozen MOVER models and recalibration were applied to ${count(external.n)} VitalDB patients with ${count(external.events)} events. Points away from the diagonal show miscalibration.`}
             table={{
               columns: ["Decile", "LR predicted", "LR observed", "XGBoost predicted", "XGBoost observed"],

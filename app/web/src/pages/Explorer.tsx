@@ -191,7 +191,7 @@ function LiveExplorer() {
       </PageHeader>
 
       <div className="grid items-start gap-5 lg:grid-cols-[20rem_minmax(0,1fr)]">
-        <aside className="rounded-lg border border-line p-4 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto" aria-label="Patient inputs">
+        <aside className="rounded-lg border border-line p-4" aria-label="Patient inputs">
           <label htmlFor="patient" className="text-sm font-medium text-ink">Example patient</label>
           <select id="patient" value={patientId} onChange={(event) => choose(event.target.value)} className="mt-1 h-10 w-full rounded border border-line bg-white px-2 text-sm text-ink">
             {groups.map((group) => (
@@ -202,14 +202,16 @@ function LiveExplorer() {
           </select>
           <p className="m-0 mt-2 text-xs leading-relaxed text-muted">{patient.description}</p>
           {patient.source === "synthetic" && <p className="m-0 mt-1 text-xs font-medium text-warn">Synthetic profile, not a real patient.</p>}
-          <div className="mt-3 flex min-h-9 flex-wrap items-center gap-2">
-            <OutcomeReveal patient={patient} endpoint={endpoint} />
-            {edited && (
-              <button type="button" onClick={() => setInputs(patient.inputs)} className="min-h-9 rounded border border-line px-3 text-sm font-medium text-ink hover:bg-wash">
-                Reset inputs
-              </button>
-            )}
-          </div>
+          {(patient.has_outcome || edited) && (
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <OutcomeReveal patient={patient} endpoint={endpoint} />
+              {edited && (
+                <button type="button" onClick={() => setInputs(patient.inputs)} className="min-h-9 rounded border border-line px-3 text-sm font-medium text-ink hover:bg-wash">
+                  Reset inputs
+                </button>
+              )}
+            </div>
+          )}
           <div className="mt-3 border-t border-line pt-2">
             <InputPanel inputs={inputs} meta={meta} errors={errors} onChange={setInputs} />
           </div>
@@ -228,7 +230,7 @@ function LiveExplorer() {
             <>
               <section aria-labelledby="explanation" className="rounded-lg border border-line bg-wash p-4 sm:p-5">
                 <h2 id="explanation" className="text-xl">In plain language</h2>
-                <div className="mt-2 space-y-2 text-sm leading-relaxed" data-testid="plain-language">
+                <div className="mt-2 flex flex-col gap-2 text-sm leading-relaxed" data-testid="plain-language">
                   {plainLanguage(current.lr, current.xgboost, inputs, data).map((sentence) => <p key={sentence} className="m-0">{sentence}</p>)}
                 </div>
               </section>

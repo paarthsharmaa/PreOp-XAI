@@ -1,6 +1,10 @@
 export const fixed = (value: number, digits = 3) => value.toFixed(digits);
 
-export const signed = (value: number, digits = 3) => `${value >= 0 ? "+" : "−"}${Math.abs(value).toFixed(digits)}`;
+export function signed(value: number, digits = 3): string {
+  const text = Math.abs(value).toFixed(digits);
+  if (Number(text) === 0) return text;
+  return `${value > 0 ? "+" : "−"}${text}`;
+}
 
 export const count = (value: number | string) => (typeof value === "number" ? value.toLocaleString("en-US") : value);
 

@@ -82,7 +82,7 @@ export function CurveChart({
           <XAxis type="number" dataKey="x" domain={[0, max]} ticks={ticks} scale={xScale} tick={AXIS} tickFormatter={format}
             stroke={GRID} allowDataOverflow label={{ value: xLabel, position: "insideBottom", offset: -16, ...AXIS }} />
           <YAxis type="number" dataKey="y" domain={[0, max]} ticks={ticks} scale={xScale} tick={AXIS} tickFormatter={format}
-            stroke={GRID} width={46} allowDataOverflow label={{ value: yLabel, angle: -90, position: "insideLeft", offset: 8, style: { textAnchor: "middle", ...AXIS } }} />
+            stroke={GRID} width={max < 1 ? 62 : 46} allowDataOverflow label={{ value: yLabel, angle: -90, position: "insideLeft", offset: 2, style: { textAnchor: "middle", ...AXIS } }} />
           {diagonal && <ReferenceLine segment={[{ x: 0, y: 0 }, { x: max, y: max }]} stroke="#c3c8ce" strokeWidth={1} />}
           {baseline !== undefined && <ReferenceLine y={baseline} stroke="#c3c8ce" strokeWidth={1} />}
           <Tooltip cursor={{ stroke: "#c3c8ce" }} content={<PointTooltip xLabel={xLabel} yLabel={yLabel} digits={digits} />} />
@@ -93,11 +93,11 @@ export function CurveChart({
               data={series[model].map((point) => ({ ...point, name: site.labels.models[model] }))}
               fill={COLORS[model]}
               isAnimationActive={false}
-              line={{ stroke: COLORS[model], strokeWidth: 2, strokeDasharray: DASH[model] }}
+              line={markers ? false : { stroke: COLORS[model], strokeWidth: 2, strokeDasharray: DASH[model] }}
               lineType="joint"
               shape={(props: { cx?: number; cy?: number }) =>
                 markers ? (
-                  <circle cx={props.cx} cy={props.cy} r={4} fill={model === "lr" ? "#ffffff" : COLORS[model]} stroke={model === "lr" ? COLORS[model] : "#ffffff"} strokeWidth={2} />
+                  <circle cx={props.cx} cy={props.cy} r={5} fill={model === "lr" ? "#ffffff" : COLORS[model]} stroke={model === "lr" ? COLORS[model] : "#ffffff"} strokeWidth={2} />
                 ) : (
                   <circle cx={props.cx} cy={props.cy} r={5} fill="transparent" />
                 )
@@ -213,10 +213,10 @@ export function Forest({ rows }: { rows: { label: string; model: ModelKey; ci: C
   const pad = (high - low) * 0.06;
   const position = (value: number) => ((value - (low - pad)) / (high - low + 2 * pad)) * 100;
   return (
-    <ul className="m-0 list-none space-y-1.5 p-0">
+    <ul className="m-0 list-none space-y-2.5 p-0 sm:space-y-1.5">
       {rows.map((row) => (
-        <li key={`${row.label}-${row.model}`} className="grid grid-cols-[minmax(0,8.5rem)_minmax(0,1fr)] items-center gap-3 text-xs sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)_8.5rem]">
-          <span className="truncate text-body">
+        <li key={`${row.label}-${row.model}`} className="grid grid-cols-1 items-center gap-x-3 text-xs sm:grid-cols-[minmax(0,11rem)_minmax(0,1fr)_9.5rem]">
+          <span className="text-body">
             {row.label} · {row.model === "lr" ? "LR" : "XGBoost"}
           </span>
           <span className="relative block h-5" role="img" aria-label={`${row.label}, ${site.labels.models[row.model]}: ${fixed(row.ci.v)}, ${site.labels.ci} ${interval(row.ci.lo, row.ci.hi)}`}>
@@ -238,7 +238,7 @@ export function Forest({ rows }: { rows: { label: string; model: ModelKey; ci: C
               }}
             />
           </span>
-          <span className="numeric col-start-2 text-muted sm:col-start-auto sm:text-right">
+          <span className="numeric text-muted sm:text-right">
             {fixed(row.ci.v)} ({interval(row.ci.lo, row.ci.hi)})
           </span>
         </li>

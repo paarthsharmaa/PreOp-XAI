@@ -53,11 +53,11 @@ export function CohortFlow() {
                 onFocus={() => setActive(index)}
                 onClick={() => setActive(index)}
                 aria-pressed={shown === index}
-                className={`grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 rounded px-2 py-1 text-left transition-colors sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_5rem] ${
+                className={`grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 rounded px-2 py-1 text-left transition-colors sm:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_5rem] ${
                   shown === index ? "bg-accent-soft" : "hover:bg-wash"
                 }`}
               >
-                <span className={`truncate text-sm ${isOut ? "pl-3 text-muted" : "font-medium text-ink"}`}>
+                <span className={`text-sm ${isOut ? "pl-3 text-muted" : "font-medium text-ink"}`}>
                   {step.label}
                 </span>
                 <span className="col-span-2 row-start-2 mt-1 block h-2 sm:col-span-1 sm:row-start-auto sm:mt-0" aria-hidden="true">
