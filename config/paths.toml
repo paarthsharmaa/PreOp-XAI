@@ -1,0 +1,7 @@
+# Local data and output locations. Relative paths resolve from the repository root.
+# Override any value with PREOPXAI_MOVER_RAW, PREOPXAI_VITALDB_CLINICAL or PREOPXAI_OUTPUTS,
+# or point PREOPXAI_CONFIG at another file.
+[paths]
+mover_raw = "data/mover/EPIC_EMR/EMR"
+vitaldb_clinical = "data/vitaldb/vitaldb_cases.csv"
+outputs = "outputs"

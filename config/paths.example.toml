@@ -1,0 +1,6 @@
+# Copy to another file and set PREOPXAI_CONFIG to use it.
+# Relative paths resolve from the repository root; absolute paths and ~ also work.
+[paths]
+mover_raw = "/path/to/mover/EPIC_EMR/EMR"
+vitaldb_clinical = "/path/to/vitaldb/vitaldb_cases.csv"
+outputs = "outputs"

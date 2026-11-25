@@ -1,7 +1,7 @@
 [project]
-name = "preop-xai-reproduction"
+name = "preop-xai"
 version = "0.1.0"
-description = "Reproducible execution of the unchanged MOVER PreOp-XAI reference"
+description = "Explainable preoperative risk prediction on MOVER with external validation on VitalDB"
 requires-python = "==3.13.*"
 dependencies = [
   "scikit-learn==1.8.0",
@@ -10,9 +10,6 @@ dependencies = [
   "pandas==3.0.2",
   "scipy==1.17.1",
   "matplotlib==3.10.9",
-  "python-docx==1.2.0",
-  "lxml==6.0.2",
-  "pypandoc-binary==1.15",
   "pydantic==2.12.5",
 ]
 
@@ -23,10 +20,45 @@ package = false
 dev = [
     "basedpyright>=1.40.2",
     "pandas-stubs>=3.0.5.260914",
+    "pytest>=9.2.0",
+    "ruff>=0.17.6",
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = [".", "src"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+include = ["pipeline/**/*.py", "tests/**/*.py"]
+# Scientific modules keep their established formatting.
+exclude = [
+  "pipeline/protocol.py",
+  "pipeline/reporting/figs_mover.py",
+  "pipeline/reporting/figstyle.py",
+  "pipeline/reporting/summarize.py",
+  "tests/shap_selftest.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = ["pipeline", "preopxai", "data_prep"]
+
 [tool.basedpyright]
-include = ["scripts"]
+include = ["pipeline", "tests"]
+exclude = [
+  "pipeline/protocol.py",
+  "pipeline/reporting/figs_mover.py",
+  "pipeline/reporting/figstyle.py",
+  "pipeline/reporting/summarize.py",
+  "tests/shap_selftest.py",
+]
+extraPaths = ["src", "."]
 venvPath = "."
 venv = ".venv"
-typeCheckingMode = "all"
+typeCheckingMode = "standard"

@@ -1,0 +1,5 @@
+tree trial 0: depth 2, 50 trees, 5 features: max |exact - brute force| = 3.74e-07
+tree trial 1: depth 3, 120 trees, 6 features: max |exact - brute force| = 4.91e-07
+tree trial 2: depth 3, 300 trees, 7 features: max |exact - brute force| = 9.67e-07
+linear: max |exact - brute force| = 1.33e-15; additivity error 1.78e-15
+PASS

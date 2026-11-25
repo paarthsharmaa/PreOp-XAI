@@ -1,0 +1,52 @@
+[00:40:47] environment: Python 3.13.14, scikit-learn 1.8.0, xgboost 2.1.4, numpy 2.4.4, pandas 3.0.2, scipy 1.17.1, matplotlib 3.10.9
+[00:40:53] exact-SHAP self-test passed: linear: max |exact - brute force| = 1.33e-15; additivity error 1.78e-15
+[00:40:57] main mortality: started (about 5-15 minutes)
+[00:42:27] main mortality: done in 90.0 s; test events 47; AUROC test LR 0.916 XGB 0.923; VitalDB LR 0.671 XGB 0.687
+[00:42:27] main icu: started (about 5-15 minutes)
+[00:44:07] main icu: done in 100.4 s; test events 2049; AUROC test LR 0.752 XGB 0.754; VitalDB LR 0.688 XGB 0.659
+[00:44:58] lag-0 mortality: AUROC LR 0.935 XGB 0.939
+[00:45:53] lag-0 icu: AUROC LR 0.771 XGB 0.782
+[00:45:53] determinism check: re-running the main mortality analysis
+[00:47:20] determinism check: identical = True
+[00:48:53] split check: primary test ICU 2049 (seeds 1-1000: 1932-2157)
+[00:48:53] repeated splits: 200 runs left, 10 parallel workers (this is the longest step)
+[00:51:18]   5/200 done (last: mortality seed 2 {'lr': 0.94, 'xgboost': 0.95}); about 95 min left
+[00:51:22]   10/200 done (last: mortality seed 6 {'lr': 0.949, 'xgboost': 0.945}); about 47 min left
+[00:53:28]   15/200 done (last: mortality seed 14 {'lr': 0.937, 'xgboost': 0.925}); about 57 min left
+[00:53:33]   20/200 done (last: mortality seed 19 {'lr': 0.946, 'xgboost': 0.942}); about 42 min left
+[00:55:45]   25/200 done (last: mortality seed 23 {'lr': 0.948, 'xgboost': 0.944}); about 48 min left
+[00:55:50]   30/200 done (last: mortality seed 30 {'lr': 0.908, 'xgboost': 0.929}); about 39 min left
+[00:58:04]   35/200 done (last: mortality seed 34 {'lr': 0.91, 'xgboost': 0.906}); about 43 min left
+[00:58:15]   40/200 done (last: mortality seed 40 {'lr': 0.905, 'xgboost': 0.904}); about 37 min left
+[01:00:36]   45/200 done (last: mortality seed 44 {'lr': 0.919, 'xgboost': 0.916}); about 40 min left
+[01:00:46]   50/200 done (last: mortality seed 50 {'lr': 0.906, 'xgboost': 0.895}); about 36 min left
+[01:03:01]   55/200 done (last: mortality seed 55 {'lr': 0.899, 'xgboost': 0.908}); about 37 min left
+[01:03:14]   60/200 done (last: mortality seed 60 {'lr': 0.925, 'xgboost': 0.923}); about 33 min left
+[01:05:19]   65/200 done (last: mortality seed 66 {'lr': 0.913, 'xgboost': 0.944}); about 34 min left
+[01:05:33]   70/200 done (last: mortality seed 70 {'lr': 0.921, 'xgboost': 0.927}); about 31 min left
+[01:07:34]   75/200 done (last: mortality seed 75 {'lr': 0.952, 'xgboost': 0.948}); about 31 min left
+[01:07:48]   80/200 done (last: mortality seed 80 {'lr': 0.95, 'xgboost': 0.942}); about 28 min left
+[01:09:46]   85/200 done (last: mortality seed 87 {'lr': 0.933, 'xgboost': 0.926}); about 28 min left
+[01:10:00]   90/200 done (last: mortality seed 90 {'lr': 0.911, 'xgboost': 0.911}); about 26 min left
+[01:12:07]   95/200 done (last: mortality seed 96 {'lr': 0.936, 'xgboost': 0.933}); about 26 min left
+[01:12:18]   100/200 done (last: mortality seed 100 {'lr': 0.946, 'xgboost': 0.946}); about 23 min left
+[01:14:52]   105/200 done (last: icu seed 2 {'lr': 0.741, 'xgboost': 0.743}); about 24 min left
+[01:15:09]   110/200 done (last: icu seed 10 {'lr': 0.738, 'xgboost': 0.742}); about 21 min left
+[01:17:30]   115/200 done (last: icu seed 12 {'lr': 0.744, 'xgboost': 0.744}); about 21 min left
+[01:17:50]   120/200 done (last: icu seed 20 {'lr': 0.742, 'xgboost': 0.742}); about 19 min left
+[01:20:07]   125/200 done (last: icu seed 26 {'lr': 0.74, 'xgboost': 0.741}); about 19 min left
+[01:20:27]   130/200 done (last: icu seed 29 {'lr': 0.739, 'xgboost': 0.74}); about 17 min left
+[01:22:47]   135/200 done (last: icu seed 33 {'lr': 0.739, 'xgboost': 0.743}); about 16 min left
+[01:23:09]   140/200 done (last: icu seed 40 {'lr': 0.748, 'xgboost': 0.749}); about 15 min left
+[01:25:31]   145/200 done (last: icu seed 46 {'lr': 0.745, 'xgboost': 0.75}); about 14 min left
+[01:25:53]   150/200 done (last: icu seed 50 {'lr': 0.739, 'xgboost': 0.742}); about 12 min left
+[01:28:00]   155/200 done (last: icu seed 54 {'lr': 0.744, 'xgboost': 0.746}); about 11 min left
+[01:28:25]   160/200 done (last: icu seed 60 {'lr': 0.735, 'xgboost': 0.736}); about 10 min left
+[01:30:31]   165/200 done (last: icu seed 65 {'lr': 0.739, 'xgboost': 0.744}); about 9 min left
+[01:30:57]   170/200 done (last: icu seed 70 {'lr': 0.745, 'xgboost': 0.749}); about 7 min left
+[01:33:04]   175/200 done (last: icu seed 75 {'lr': 0.742, 'xgboost': 0.743}); about 6 min left
+[01:33:31]   180/200 done (last: icu seed 80 {'lr': 0.739, 'xgboost': 0.74}); about 5 min left
+[01:35:33]   185/200 done (last: icu seed 84 {'lr': 0.739, 'xgboost': 0.741}); about 4 min left
+[01:36:00]   190/200 done (last: icu seed 90 {'lr': 0.74, 'xgboost': 0.742}); about 2 min left
+[01:37:53]   195/200 done (last: icu seed 94 {'lr': 0.757, 'xgboost': 0.757}); about 1 min left
+[01:38:01]   200/200 done (last: icu seed 100 {'lr': 0.744, 'xgboost': 0.747}); about 0 min left
