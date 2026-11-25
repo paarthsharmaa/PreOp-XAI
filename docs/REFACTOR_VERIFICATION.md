@@ -65,3 +65,17 @@ The brute-force self-test passes: the largest tree error is below `1e-6`, and th
 | `verify` against committed Windows results | **exit 1: 115 of 226 artifacts differ** |
 
 The `verify` failure existed before the refactor and is explained in [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md).
+
+## Typer CLI migration
+
+After the move to the `preopxai` command, `prepare` and `protocol environment main` were run
+again from an empty output folder and compared with the same baseline at `rtol=1e-8`,
+`atol=1e-10`.
+
+| Check | Result |
+| --- | --- |
+| `prepare`, `protocol environment main` | exit 0, 54 s and 104 s |
+| Analysis tables | DataFrame and SHA-256 equal |
+| Cohort flow, feature statistics, respiratory feasibility | identical |
+| Main-stage outputs (64 files) | equal; only `runtime_s` in `study.json` differs |
+| `export-models` | PASS; saved models byte-identical to the previous export |
