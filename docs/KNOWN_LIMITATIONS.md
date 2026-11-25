@@ -2,7 +2,7 @@
 
 ## Numerical stability of the calibration diagnostics
 
-`make verify` currently **fails**: 115 of 226 aggregate JSON artifacts differ from the committed
+`uv run preopxai verify` currently **fails**: 115 of 226 aggregate JSON artifacts differ from the committed
 `results/` at `rtol=1e-8`, `atol=1e-10`. The tolerances have not been loosened and the committed
 results have not been overwritten to make the check pass.
 

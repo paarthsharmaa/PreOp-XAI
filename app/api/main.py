@@ -1,10 +1,13 @@
-"""FastAPI app. Run through `make app`; it binds to localhost and must not be deployed publicly."""
+"""FastAPI app. Run through `uv run preopxai app serve`; it binds to localhost and must not be deployed publicly."""
 
 from __future__ import annotations
+
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.api.engine import NOTICE, Engine
 from app.api.patients import ATTRIBUTION, PatientStore
@@ -66,3 +69,11 @@ def create_app() -> FastAPI:
         return store.outcomes[patient_id]
 
     return app
+
+
+def create_site(web_root: Path) -> FastAPI:
+    """Serve the built frontend at / and the API at /api, on one port."""
+    site = FastAPI(title="PreOp-XAI", docs_url=None, redoc_url=None, openapi_url=None)
+    site.mount("/api", create_app())
+    site.mount("/", StaticFiles(directory=web_root, html=True), name="web")
+    return site

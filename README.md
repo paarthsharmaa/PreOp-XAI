@@ -32,7 +32,7 @@ hold up at a different hospital.
 | ICU admission | XGBoost | 0.754 (0.740–0.768) | 0.745 (0.736–0.758) | 0.659 (0.639–0.680) | 0.720 |
 <!-- results:end -->
 
-*Generated from `results/` by `make table`.*
+*Generated from `results/` by `uv run preopxai table`.*
 
 - **XGBoost and logistic regression perform almost identically** across the 100 repeated splits.
 - **Performance falls at external validation**, especially for mortality, where VitalDB has few
@@ -67,22 +67,29 @@ flowchart LR
 
 ## Quickstart
 
-Requires [uv](https://docs.astral.sh/uv/). Python 3.13 and all dependencies come from `uv.lock`.
+Requires [uv](https://docs.astral.sh/uv/) and, for the dashboard, Node.js. Python 3.13 and all
+Python dependencies come from `uv.lock`. Place the data as described in
+[`data/README.md`](data/README.md) first.
 
 ```sh
-make setup      # install the locked environment
-make check      # validate dependencies and input files
-make prepare    # build analysis tables from raw MOVER files
-make protocol   # run the full study
-make report     # generate the summary and figures
-make verify     # SHAP self-test and strict comparison with results/
-make test       # run the test suite
-make all        # check, prepare, protocol, report and verify
+uv sync                          # install the locked environment
+uv run preopxai check            # validate dependencies and input files
+uv run preopxai prepare          # build analysis tables from raw MOVER files
+uv run preopxai protocol         # run the full study
+uv run preopxai report           # generate the summary and figures
+uv run preopxai verify           # SHAP self-test and strict comparison with results/
+uv run preopxai export-models    # save the primary models to artifacts/ and check them against results/
+uv run preopxai test             # run the test suite
+uv run preopxai app build        # build the site data and the web frontend
+uv run preopxai app serve        # serve the dashboard and its API on http://127.0.0.1:8000
 ```
 
-A full run takes about 15 minutes on 16 cores with the default 6 workers. `make verify`, and so
-`make all`, currently exits nonzero for the reason given in
-[Known limitations](docs/KNOWN_LIMITATIONS.md).
+`uv run preopxai all` runs check, prepare, protocol, report and verify in one go, and every
+command has `--help`. `protocol` also takes individual steps, for example
+`uv run preopxai protocol environment main`.
+
+A full run takes about 15 minutes on 16 cores with the default 6 workers. `verify`, and so `all`,
+currently exits nonzero for the reason given in [Known limitations](docs/KNOWN_LIMITATIONS.md).
 
 ## Dashboard
 
@@ -100,16 +107,14 @@ A local web app presents the findings and explains individual predictions from b
 | --- | --- |
 | ![Methods page](docs/screenshots/methods-desktop.png) | ![Team page](docs/screenshots/team-desktop.png) |
 
-```sh
-make export-models  # refit the primary split, save it to artifacts/ and verify it against results/
-make app            # build the site data and start the API and web app on 127.0.0.1
-make app-test       # API, SHAP additivity, determinism and traceability tests
-make app-e2e        # Playwright smoke tests
-make app-static     # build the findings-only static site
-```
+`uv run preopxai app serve` serves the built frontend and the API on one port, bound to 127.0.0.1.
+It needs the models from `uv run preopxai export-models`. Other dashboard commands:
 
-`make app` needs Node.js as well as uv. Open <http://127.0.0.1:5173>. `docker compose up --build` serves the same app
-on <http://127.0.0.1:8080>, with `artifacts/` and `data/vitaldb/` mounted read-only.
+```sh
+uv run preopxai app build --static   # build the findings-only static site into app/web/dist-static
+uv run preopxai app e2e              # Playwright smoke tests
+uv run preopxai app screenshots      # regenerate docs/screenshots
+```
 
 - **Traceable numbers.** `app/build_data.py` generates all site data from `results/` and `verification/`, and a test
   recomputes every displayed number from its source.

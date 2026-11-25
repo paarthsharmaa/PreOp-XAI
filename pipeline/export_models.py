@@ -160,7 +160,7 @@ def main() -> None:
     paths = load_paths()
     table = paths.tables / "mover_analysis.csv"
     if not table.is_file():
-        raise SystemExit(f"Missing {table}. Run `make prepare` first.")
+        raise SystemExit(f"Missing {table}. Run `uv run preopxai prepare` first.")
     if not paths.vitaldb_clinical.is_file():
         raise SystemExit(f"Missing {paths.vitaldb_clinical}. See data/README.md.")
     root = artifacts_dir()

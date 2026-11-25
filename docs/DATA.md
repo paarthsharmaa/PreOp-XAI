@@ -36,7 +36,7 @@ export. `tests/test_data_guard.py` fails if any file under `data/`, any non-aggr
 or any pickle or array file is tracked.
 
 `artifacts/` holds the fitted models and the 64-row MOVER SHAP background. It is ignored by
-git, excluded from Docker build contexts and read only by the local API.
+git and read only by the local API.
 
 Check that sharing these aggregates is permitted under your MOVER data usage agreement
 before making the repository public.

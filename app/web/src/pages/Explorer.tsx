@@ -42,7 +42,7 @@ function StaticNotice() {
       </PageHeader>
       <div className="max-w-2xl rounded-lg border border-line p-5">
         <h2 className="text-xl">Start it on your machine</h2>
-        <pre className="mt-3 overflow-x-auto rounded bg-wash p-3 text-sm text-ink"><code>{"make setup\nmake export-models\nmake app"}</code></pre>
+        <pre className="mt-3 overflow-x-auto rounded bg-wash p-3 text-sm text-ink"><code>{"uv sync\nuv run preopxai export-models\nuv run preopxai app build\nuv run preopxai app serve"}</code></pre>
         <p className="mt-3 text-sm leading-relaxed">
           You need approved access to MOVER and a copy of VitalDB, placed as described in the repository's data guide.
         </p>
@@ -172,7 +172,7 @@ function LiveExplorer() {
     return (
       <>
         <PageHeader eyebrow="Patient explorer" title="The local API is not running">
-          Start it with <code>make app</code>, then reload this page. The research findings stay available without it.
+          Start it with <code>uv run preopxai app serve</code>, then reload this page. The research findings stay available without it.
         </PageHeader>
       </>
     );

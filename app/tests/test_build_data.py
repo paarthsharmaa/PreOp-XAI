@@ -106,7 +106,7 @@ def test_no_mover_background_row_in_web_output():
     if not all((artifacts_dir() / name / "background.csv").is_file() for name in ENDPOINTS):
         pytest.skip("Model artifacts not found.")
     files = [path for path in published_files() if path.suffix == ".json"]
-    assert files, "Run `make app-data` first."
+    assert files, "Run `uv run preopxai app build` first."
     groups = [group for path in files for group in numeric_groups(json.loads(path.read_text())) if len(group) >= 2]
     for endpoint in ENDPOINTS:
         background = pd.read_csv(artifacts_dir() / endpoint / "background.csv")

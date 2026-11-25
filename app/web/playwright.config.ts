@@ -15,7 +15,7 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: "cd ../.. && uv run --locked --group app uvicorn app.api.main:create_app --factory --host 127.0.0.1 --port 8010",
+      command: "cd ../.. && uv run --locked uvicorn app.api.main:create_app --factory --host 127.0.0.1 --port 8010",
       url: "http://127.0.0.1:8010/health",
       reuseExistingServer: true,
       timeout: 60_000,

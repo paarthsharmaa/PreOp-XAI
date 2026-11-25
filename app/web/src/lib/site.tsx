@@ -20,7 +20,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   if (failed) {
     return (
       <p className="mx-auto max-w-xl px-4 py-24 text-center">
-        The results data could not be loaded. Run <code>make app-data</code> and reload this page.
+        The results data could not be loaded. Run <code>uv run preopxai app build</code> and reload this page.
       </p>
     );
   }

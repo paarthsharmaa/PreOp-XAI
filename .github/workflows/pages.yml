@@ -18,19 +18,13 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+      - uses: astral-sh/setup-uv@v6
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
           cache: npm
           cache-dependency-path: app/web/package-lock.json
-      - run: python -m app.build_data
-      - run: npm ci
-        working-directory: app/web
-      - run: npm run build:static
-        working-directory: app/web
+      - run: uv run --locked preopxai app build --static
       - uses: actions/upload-pages-artifact@v3
         with:
           path: app/web/dist-static

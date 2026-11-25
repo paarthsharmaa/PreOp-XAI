@@ -10,7 +10,7 @@ flowchart LR
     D --> G[(outputs/export<br/>aggregate only)]
     G --> H[report<br/>summary + figures]
     H --> I[verify<br/>strict comparison]
-    H -. make promote .-> J[(results/ + verification/)]
+    H -. report --promote .-> J[(results/ + verification/)]
 ```
 
 ## Folders
@@ -29,16 +29,23 @@ flowchart LR
 
 ## Stages
 
-| Stage | Command | Output |
-| --- | --- | --- |
-| `check` | `make check` | Dependency and input validation |
-| `prepare` | `make prepare` | Analysis tables |
-| `protocol` | `make protocol` | Models, metrics, SHAP, stability, repeats, export |
-| `report` | `make report` | `summary.json`, figures as PNG, PDF and SVG |
-| `verify` | `make verify` | SHAP self-test and strict comparison with `results/` |
-| `all` | `make all` | All of the above, in order |
-| `export-models` | `make export-models` | Primary-split models in `artifacts/`, verified against `results/` (not part of `all`) |
-| `app` | `make app` | Site data, local API and web app |
+All stages run through one Typer CLI, `preopxai` (`pipeline/cli.py`). Run any of them as
+`uv run preopxai <command>`; each has `--help`.
+
+| Command | Output |
+| --- | --- |
+| `check` | Dependency and input validation |
+| `prepare` | Analysis tables |
+| `protocol [steps...]` | Models, metrics, SHAP, stability, repeats, export |
+| `report [--promote]` | `summary.json`, figures as PNG, PDF and SVG; `--promote` copies them into `results/` and `verification/` and refreshes the README table |
+| `verify` | SHAP self-test and strict comparison with `results/` |
+| `all` | `check`, `prepare`, `protocol`, `report` and `verify`, in order |
+| `export-models` | Primary-split models in `artifacts/`, verified against `results/` (not part of `all`) |
+| `table [--check]` | README results table from `results/` |
+| `test` | Site data, then the pytest suites in `tests/` and `app/tests/` |
+| `app build [--static]` | Site data and the web frontend (`app/web/dist`, or the findings-only `dist-static`) |
+| `app serve [--port]` | Frontend at `/` and API at `/api` on one port, bound to 127.0.0.1 |
+| `app e2e`, `app screenshots` | Playwright smoke tests and `docs/screenshots` |
 
 Protocol steps are `environment main lag0 rerun split_check repeats export`. Finished steps
 are skipped, so an interrupted run can resume. To start clean, point `PREOPXAI_OUTPUTS` at an
@@ -54,5 +61,5 @@ override it. `PREOPXAI_WORKERS` changes parallelism only (default 6).
 
 `src/preopxai/` also contains a YAML-configured workflow (`cli.py`, `config.py`, `workflow.py`,
 `cohort.py`, `labels.py`, `features.py`, `audit.py`, `status.py`, `demo.py`, `inference.py`).
-It needs `typer`, `pyyaml` and `polars`, which are not in the locked environment, and the
-pipeline does not call it.
+It needs `pyyaml` and `polars`, which are not in the locked environment, and the pipeline and
+the `preopxai` command do not call it.

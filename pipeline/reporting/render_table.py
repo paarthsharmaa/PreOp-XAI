@@ -79,7 +79,7 @@ def main() -> None:
     updated = update(readme, render(ROOT / "results"))
     if "--check" in sys.argv:
         if updated != readme.read_text():
-            raise SystemExit("README results table is stale; run make table.")
+            raise SystemExit("README results table is stale; run `uv run preopxai table`.")
         return
     _ = readme.write_text(updated)
 

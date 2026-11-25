@@ -50,7 +50,7 @@ class Engine:
         directory = root or artifacts_dir()
         missing = [name for name in ENDPOINTS if not (directory / name / "metadata.json").is_file()]
         if missing:
-            raise RuntimeError(f"Missing model artifacts for {missing}. Run `make export-models` first.")
+            raise RuntimeError(f"Missing model artifacts for {missing}. Run `uv run preopxai export-models` first.")
         self._saved: dict[str, EndpointArtifacts] = {name: load_endpoint(directory / name) for name in ENDPOINTS}
         self._margins = {
             name: TreeMargin(saved.bundles["xgboost"].pipeline.named_steps["model"])

@@ -11,11 +11,12 @@ const STAGES = [
   { title: "Validate externally", text: "Frozen models and recalibration applied to VitalDB." },
 ];
 
-const COMMANDS = `make setup          # install the locked environment
-make prepare        # build analysis tables from raw MOVER files
-make protocol       # run the full study
-make export-models  # refit, save and verify the primary models
-make app            # build data, start the API and the web app`;
+const COMMANDS = `uv sync                          # install the locked environment
+uv run preopxai prepare          # build analysis tables from raw MOVER files
+uv run preopxai protocol         # run the full study
+uv run preopxai export-models    # refit, save and verify the primary models
+uv run preopxai app build        # build the site data and the frontend
+uv run preopxai app serve        # serve the app and the API on 127.0.0.1:8000`;
 
 export function Methods() {
   const { methods, endpoints } = useSite();

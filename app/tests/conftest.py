@@ -12,7 +12,7 @@ from pipeline.model_artifacts import ENDPOINTS, artifacts_dir
 @pytest.fixture(scope="session")
 def client() -> Iterator[object]:
     if not all((artifacts_dir() / name / "metadata.json").is_file() for name in ENDPOINTS):
-        pytest.skip("Model artifacts not found. Run `make export-models`.")
+        pytest.skip("Model artifacts not found. Run `uv run preopxai export-models`.")
     if not load_paths().vitaldb_clinical.is_file():
         pytest.skip("VitalDB clinical table not found.")
     from fastapi.testclient import TestClient
