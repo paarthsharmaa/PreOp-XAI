@@ -66,7 +66,7 @@ def load_information(raw_dir: Path) -> pd.DataFrame:
 def build_cohort(information: pd.DataFrame) -> pd.DataFrame:
     """Quarantine conflicting operations, then index first eligible operation.
 
-    Review metadata is supplied externally in information.attrs["review"].
+    Review metadata is provided externally in information.attrs["review"].
     ASA values must already have been translated to canonical classes 1--6.
     """
     require_columns(information, INFORMATION_COLUMNS.values())

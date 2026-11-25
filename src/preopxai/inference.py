@@ -127,7 +127,7 @@ def _schema(feature_mapping: MappingDocument) -> list[FeatureSpec]:
             or bounds[0] >= bounds[1]
         ):
             raise ValueError(f"Invalid units or bounds for {name}.")
-        # These are targets of upstream normalization, not source-unit aliases.
+        # These are targets of earlier normalization, not source-unit aliases.
         # A source dictionary need not contain a factor-one spelling of its target.
         canonical = CANONICAL_UNITS[name]
         schema.append(

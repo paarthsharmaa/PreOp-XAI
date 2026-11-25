@@ -160,9 +160,28 @@ tests/           pytest suite
 
 ## Team
 
-B.Tech minor project, AI & Data Science, VIPS.
+B.Tech minor project, Artificial Intelligence and Data Science, VIPS.
 
 - **Project group:** Paarth Sharma, Manas Lahora, Yug Sharma
 - **Supervisor:** Ms Anjani Gupta
+
+## Citations
+
+Data:
+
+- **MOVER**: Samad M, Angel M, Rinehart J, et al. Medical Informatics Operating Room Vitals and
+  Events Repository (MOVER): a public-access operating room database. *JAMIA Open*
+  2023;6(4):ooad084. University of California, Irvine. Used under its data usage agreement.
+- **VitalDB**: Lee HC, Park Y, Yoon SB, et al. VitalDB, a high-fidelity multi-parameter vital
+  signs database in surgical patients. *Sci Data* 2022;9:279. Seoul National University
+  Hospital. Used under CC BY 4.0.
+
+Software and methods:
+
+- **scikit-learn**: Pedregosa F, et al. Scikit-learn: machine learning in Python. *JMLR*
+  2011;12:2825–2830.
+- **XGBoost**: Chen T, Guestrin C. XGBoost: a scalable tree boosting system. *KDD* 2016.
+- **SHAP / interventional TreeSHAP**: Lundberg SM, et al. From local explanations to global
+  understanding with explainable AI for trees. *Nat Mach Intell* 2020;2:56–67.
 
 *Research software. Not validated for clinical use.*
