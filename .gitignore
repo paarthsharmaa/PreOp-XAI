@@ -3,6 +3,9 @@
 !/data/README.md
 /outputs/
 
+# Fitted models and the MOVER SHAP background stay local.
+/artifacts/
+
 # Earlier local working copy with patient-level tables and runs.
 /MOVER/
 
@@ -22,3 +25,12 @@ __pycache__/
 .ruff_cache/
 core
 core.*
+
+# Dashboard build output.
+node_modules/
+/app/web/dist/
+/app/web/dist-static/
+/app/web/*.tsbuildinfo
+/app/web/public/data/
+/app/web/test-results/
+/app/web/playwright-report/

@@ -25,6 +25,7 @@ flowchart LR
 | `results/` | Committed aggregate results and figures |
 | `verification/` | Determinism check, SHAP self-test, split check, environment record, run log |
 | `tests/` | pytest suite |
+| `app/` | Dashboard: `build_data.py`, FastAPI backend (`api/`), React frontend (`web/`) and its tests |
 
 ## Stages
 
@@ -36,6 +37,8 @@ flowchart LR
 | `report` | `make report` | `summary.json`, figures as PNG, PDF and SVG |
 | `verify` | `make verify` | SHAP self-test and strict comparison with `results/` |
 | `all` | `make all` | All of the above, in order |
+| `export-models` | `make export-models` | Primary-split models in `artifacts/`, verified against `results/` (not part of `all`) |
+| `app` | `make app` | Site data, local API and web app |
 
 Protocol steps are `environment main lag0 rerun split_check repeats export`. Finished steps
 are skipped, so an interrupted run can resume. To start clean, point `PREOPXAI_OUTPUTS` at an

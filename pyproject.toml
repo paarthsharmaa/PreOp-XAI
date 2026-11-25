@@ -17,6 +17,11 @@ dependencies = [
 package = false
 
 [dependency-groups]
+app = [
+    "fastapi>=0.115",
+    "httpx>=0.27",
+    "uvicorn>=0.32",
+]
 dev = [
     "basedpyright>=1.40.2",
     "pandas-stubs>=3.0.5.260914",
@@ -32,7 +37,7 @@ pythonpath = [".", "src"]
 [tool.ruff]
 target-version = "py313"
 line-length = 120
-include = ["pipeline/**/*.py", "tests/**/*.py"]
+include = ["app/**/*.py", "pipeline/**/*.py", "tests/**/*.py"]
 # Scientific modules keep their established formatting.
 exclude = [
   "pipeline/protocol.py",
@@ -47,7 +52,7 @@ select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.isort]
 force-sort-within-sections = true
-known-first-party = ["pipeline", "preopxai", "data_prep"]
+known-first-party = ["app", "pipeline", "preopxai", "data_prep"]
 
 [tool.basedpyright]
 include = ["pipeline", "tests"]
