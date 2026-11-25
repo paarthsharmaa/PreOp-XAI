@@ -1,4 +1,4 @@
-"""PreOp-XAI MOVER protocol. Run through the project CLI:  uv run --locked python -m pipeline.cli protocol
+"""PreOp-XAI MOVER protocol. Run through the project CLI:  uv run preopxai protocol
 
 Steps (each is skipped if its output already exists, so the run can be resumed after an interruption):
   1. environment check and exact-SHAP self-test (brute-force comparison)
