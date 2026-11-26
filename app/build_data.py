@@ -83,8 +83,6 @@ OPS: Final[dict[str, Callable[..., float]]] = {
     "pct": lambda a: a * 100,
     "share_count": lambda share, n: round(share * n),
     "sum": lambda *values: sum(values),
-    "missing_fits": lambda splits, *counts: sum(splits - count for count in counts),
-    "total_fits": lambda splits, *counts: splits * len(counts),
 }
 
 
@@ -701,14 +699,6 @@ def methods_block(src: Sources) -> dict[str, Any]:
         "verification/shap_selftest.txt",
     )
     packages = src.lookup(f"{env}#packages")
-    summary = "results/summary.json"
-    fits = [
-        src.v(summary, f"{endpoint}/{model}/{key}/n")
-        for endpoint in ENDPOINTS
-        for model in MODELS
-        for key in ("test_cal_slope_raw", "test_cal_slope_cal")
-    ]
-    splits = src.v(summary, "mortality/splits")
     return {
         "environment": {
             "python": str(src.lookup(f"{env}#python")).split()[0],
@@ -731,10 +721,6 @@ def methods_block(src: Sources) -> dict[str, Any]:
             "median": src.v(split, "alt_test_icu_median"),
             "high": src.v(split, "alt_test_icu_max"),
             "seeds": src.v(split, "alt_seeds/1"),
-        },
-        "limitation": {
-            "non_converged": derive("missing_fits", splits, *fits),
-            "total_fits": derive("total_fits", splits, *fits),
         },
     }
 

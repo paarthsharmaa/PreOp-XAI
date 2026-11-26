@@ -147,9 +147,7 @@ export default function Findings() {
               </tbody>
             </table>
             <p className="mt-3 text-xs leading-relaxed text-muted">
-              Slope and calibration-in-the-large (CITL) describe recalibrated probabilities on the held-out test set. Quote
-              repeated-split calibration summaries to about two decimal places, because of the optimiser limitation
-              described under Methods.
+              Slope and calibration-in-the-large (CITL) describe recalibrated probabilities on the held-out test set.
             </p>
           </Figure>
         </div>

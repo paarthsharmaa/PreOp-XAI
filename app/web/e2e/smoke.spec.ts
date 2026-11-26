@@ -13,10 +13,10 @@ function trackErrors(page: Page): string[] {
 }
 
 for (const path of PAGES) {
-  test(`renders ${path} with the notice and no errors`, async ({ page }) => {
+  test(`renders ${path} with the footer notice and no errors`, async ({ page }) => {
     const errors = trackErrors(page);
     await page.goto(path);
-    await expect(page.getByRole("note").filter({ hasText: NOTICE })).toBeVisible();
+    await expect(page.getByRole("contentinfo").filter({ hasText: NOTICE })).toBeVisible();
     await expect(page.locator("h1")).toBeVisible();
     await page.waitForLoadState("networkidle");
     expect(errors).toEqual([]);

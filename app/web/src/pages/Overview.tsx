@@ -13,8 +13,10 @@ export function Overview() {
   return (
     <>
       <header className="max-w-3xl pb-10 pt-12 sm:pt-16">
-        <p className="text-sm font-medium text-accent">Explainable preoperative risk prediction</p>
-        <h1 className="mt-3 text-4xl leading-[1.12] sm:text-5xl">Does gradient boosting actually beat logistic regression?</h1>
+        <p className="font-serif text-2xl font-semibold leading-snug text-accent sm:text-3xl">
+          Explainable preoperative risk prediction for mortality and morbidity
+        </p>
+        <h1 className="mt-4 text-4xl leading-[1.12] sm:text-5xl">Does gradient boosting actually beat logistic regression?</h1>
         <p className="mt-5 text-lg leading-relaxed">
           PreOp-XAI compares logistic regression with XGBoost for predicting in-hospital mortality and ICU admission
           from ten variables available before surgery. It also asks whether their explanations are stable and whether

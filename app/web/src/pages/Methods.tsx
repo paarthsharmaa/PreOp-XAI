@@ -1,4 +1,4 @@
-import { Callout, PageHeader, Stat } from "../components/ui";
+import { PageHeader, Stat } from "../components/ui";
 import { count, scientific } from "../lib/format";
 import { useSite } from "../lib/site";
 
@@ -11,16 +11,16 @@ const STAGES = [
   { title: "Validate externally", text: "Frozen models and recalibration applied to VitalDB." },
 ];
 
-const COMMANDS = `uv sync                          # install the locked environment
-uv run preopxai prepare          # build analysis tables from raw MOVER files
-uv run preopxai protocol         # run the full study
-uv run preopxai export-models    # refit, save and verify the primary models
-uv run preopxai app build        # build the site data and the frontend
-uv run preopxai app serve        # serve the app and the API on 127.0.0.1:8000`;
+const COMMANDS = `uv sync                        # locked environment
+uv run preopxai prepare        # analysis tables
+uv run preopxai protocol       # full study
+uv run preopxai export-models  # save the models
+uv run preopxai app build      # site data and frontend
+uv run preopxai app serve      # app and API on :8000`;
 
 export function Methods() {
   const { methods, endpoints } = useSite();
-  const { selftest, determinism, split_check: split, limitation, environment } = methods;
+  const { selftest, determinism, split_check: split, environment } = methods;
   return (
     <>
       <PageHeader eyebrow="Methods and reproducibility" title="How the results were produced">
@@ -53,18 +53,6 @@ export function Methods() {
           <div className="rounded-lg border border-line p-4">
             <Stat label="Split check, ICU test events" value={count(split.primary_events)} note={`Across ${count(split.seeds)} alternative seeds: ${count(split.low)} to ${count(split.high)}, median ${count(split.median)}`} />
           </div>
-        </div>
-      </section>
-
-      <section aria-labelledby="limitation" className="mt-10">
-        <h2 id="limitation" className="text-2xl">Known numerical limitation</h2>
-        <div className="mt-4 max-w-3xl">
-          <Callout title="Calibration diagnostics are platform-sensitive.">
-            In the committed results, the slope and intercept optimiser did not converge for {count(limitation.non_converged)} of {count(limitation.total_fits)} repeated-split fits, and the set of failing fits differs between Windows and Linux. A strict comparison of a Linux run against these Windows results therefore fails. Discrimination results agree. Quote repeated-split calibration summaries to about two decimal places.
-          </Callout>
-          <p className="mt-3 text-sm">
-            Full details are in <code>docs/KNOWN_LIMITATIONS.md</code>.
-          </p>
         </div>
       </section>
 

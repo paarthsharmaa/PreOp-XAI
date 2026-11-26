@@ -106,7 +106,6 @@ export interface SiteData {
     determinism: { identical: boolean; differences: number };
     selftest: { tree_max_error: number; tree_trials: number; linear_max_error: number; passed: boolean };
     split_check: { primary_events: number; low: number; median: number; high: number; seeds: number };
-    limitation: { non_converged: number; total_fits: number };
   };
 }
 

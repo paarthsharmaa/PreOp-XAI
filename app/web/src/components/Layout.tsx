@@ -58,9 +58,6 @@ export function Layout() {
             ))}
           </nav>
         )}
-        <div role="note" className="border-t border-warn/20 bg-warn-soft">
-          <p className="mx-auto max-w-6xl px-4 py-1.5 text-xs font-medium text-warn">{site.notice}</p>
-        </div>
       </header>
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-16">
         <Outlet />
